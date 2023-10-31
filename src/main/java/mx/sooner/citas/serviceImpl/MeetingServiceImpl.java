@@ -1,22 +1,22 @@
 package mx.sooner.citas.serviceImpl;
 
-import mx.sooner.citas.dto.CatalogDto;
 import mx.sooner.citas.dto.MeetingRequestDto;
+import mx.sooner.citas.dto.TMeetingDto;
 import mx.sooner.citas.entity.*;
-import mx.sooner.citas.repository.CAttentionScheduleRepository;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MeetingServiceImpl implements MeetingService {
 
 
@@ -47,6 +47,11 @@ public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private CMeetingStatusRepositoryWrapper cMeetingStatusRepositoryWrapper;
 
+    @Autowired
+    private TObservationsMeetingRepositoryWrapper tObservationsMeetingRepositoryWrapper;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     @Override
     public ResponseEntity<?> addMeeting(MeetingRequestDto meetingDto) {
@@ -56,19 +61,14 @@ public class MeetingServiceImpl implements MeetingService {
         Optional<CAttentionSchedule> as = this.cAttentionScheduleRepository.findById(meetingDto.getIdSchedule());
         Optional<CState> st = this.cStateRepositoryWrapper.findById(meetingDto.getIdState());
         Optional<CMeetingStatus> status = this.cMeetingStatusRepositoryWrapper.findById(1);
-        List<CColony> colonies = st.get().getCCities().stream()
-                .flatMap(cCity -> cCity.getCColonies().parallelStream())
-                .filter(cColony ->  cColony.getId() == meetingDto.getIdColony())
-                .collect(Collectors.toList());
-        CColony co = colonies.get(0);
-        CCity ci = co.getIdCity();
-
+        Optional<CColony> co = this.cColonyRepositoryWrapper.findById(meetingDto.getIdColony());
+        CCity ci = co.get().getIdCity();
         TMeeting meet = new TMeeting();
         meet.setIdEvaluationCenter(ec.get());
         meet.setIdGender(ge.get());
         meet.setIdNationality(na.get());
         meet.setIdSchedule(as.get());
-        meet.setIdColony(co);
+        meet.setIdColony(co.get());
         meet.setIdCity(ci);
         meet.setIdState(st.get());
         meet.setMeetingDate(meetingDto.getMeetingDate());
@@ -84,6 +84,25 @@ public class MeetingServiceImpl implements MeetingService {
         meet.setIdMeetingStatus(status.get());
         meet.setRegistrationDate(Instant.now());
         Long id = tMeetingRepositoryWrapper.save(meet);
+        TObservationsMeeting tom = new TObservationsMeeting();
+        tom.setIdMeeting(meet);
+        tom.setObservation("");
+        tom.setRegistrationDate(Instant.now());
+        tObservationsMeetingRepositoryWrapper.save(tom);
         return new ResponseEntity<>(id, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getMeet(Long id) {
+
+        Optional<TMeeting> meet = tMeetingRepositoryWrapper.findById(id);
+
+        if (!meet.isPresent())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+
+        TMeetingDto meetingDto = modelMapper.map(meet.orElseThrow(() -> new NullPointerException("Falta agregar excepcion personalizada o usar controller advice")
+        ), TMeetingDto.class);
+
+        return new ResponseEntity<>(meetingDto, HttpStatus.OK);
     }
 }

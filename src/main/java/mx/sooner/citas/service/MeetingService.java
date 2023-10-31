@@ -6,4 +6,7 @@ import org.springframework.http.ResponseEntity;
 public interface MeetingService {
 
     ResponseEntity<?> addMeeting(MeetingRequestDto meetingDto);
+
+    ResponseEntity<?> getMeet(Long id);
+
 }

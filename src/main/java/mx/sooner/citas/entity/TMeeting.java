@@ -30,7 +30,7 @@ public class TMeeting implements Serializable {
     private Long id;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_evaluation_center", nullable = false)
     private CEvaluationCenter idEvaluationCenter;
 
@@ -39,7 +39,7 @@ public class TMeeting implements Serializable {
     private LocalDate meetingDate;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_schedule", nullable = false)
     private CAttentionSchedule idSchedule;
 
@@ -64,7 +64,7 @@ public class TMeeting implements Serializable {
     private String curp;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch =  FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_gender", nullable = false)
     private CGender idGender;
 
@@ -79,22 +79,22 @@ public class TMeeting implements Serializable {
     private String phone;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_nationality", nullable = false)
     private CNationality idNationality;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_colony", nullable = false)
     private CColony idColony;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_city", nullable = false)
     private CCity idCity;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_state", nullable = false)
     private CState idState;
 
@@ -116,7 +116,7 @@ public class TMeeting implements Serializable {
     private Instant registrationDate;
 
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_meeting_status", nullable = false)
     private CMeetingStatus idMeetingStatus;
 
