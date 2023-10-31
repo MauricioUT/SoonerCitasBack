@@ -70,7 +70,7 @@ public class CatalogsServiceImpl implements CatalogsService {
 
     /**
      * @param id
-     * @param date with format "2016-08-16"
+     * @param date with format "2023-10-30"
      * @return
      */
     @Override
@@ -86,19 +86,19 @@ public class CatalogsServiceImpl implements CatalogsService {
             return cat;
         }).collect(Collectors.toList());
 
-        return new ResponseEntity<>(cAttentionSchedules, HttpStatus.OK);
+        return new ResponseEntity<>(catalog, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<?> getAddressByPostalCode(String postalCode) {
-        List<CColony> colonies = cColonyRepositoryWrapper.findAddresByPostalCode(postalCode);
+        //List<CColony> colonies = cColonyRepositoryWrapper.findAddresByPostalCode(postalCode);
         Optional<CCity> cities = cCityRepositoryWrapper.findById(1);
        /* AddressDto address = colonies.stream().map( cColony -> {
             CatalogDto city = new CatalogDto(cColony.getIdCity().getId(), cColony.getIdCity().getCity());
             CatalogDto state = new CatalogDto(cColony.getIdCity().getIdState().getId(), cColony.getIdCity().getIdState().getState());
             ca
         });*/
-        return new ResponseEntity<>(colonies, HttpStatus.OK);
+        return new ResponseEntity<>(cities, HttpStatus.OK);
     }
 
     private ResponseEntity<?> getCeEvaluationCenter() {
