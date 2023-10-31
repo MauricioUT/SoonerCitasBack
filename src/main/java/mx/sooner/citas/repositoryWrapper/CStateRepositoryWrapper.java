@@ -1,5 +1,6 @@
 package mx.sooner.citas.repositoryWrapper;
 
+import mx.sooner.citas.entity.CColony;
 import mx.sooner.citas.entity.CState;
 import mx.sooner.citas.repository.CStateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -17,4 +19,9 @@ public class CStateRepositoryWrapper {
     public List<CState> findAll() {
         return cStateRepository.findAll();
     }
+
+    public Optional<CState> getStateByPostalCode(String cp) {
+        return cStateRepository.getStateByPostalCode(cp);
+    }
+
 }

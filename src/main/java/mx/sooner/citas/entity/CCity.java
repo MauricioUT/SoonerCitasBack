@@ -11,10 +11,10 @@ import javax.validation.constraints.Size;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "C_CITIES")
 public class CCity {

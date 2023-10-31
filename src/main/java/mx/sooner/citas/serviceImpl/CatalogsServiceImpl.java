@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 
@@ -37,6 +38,10 @@ public class CatalogsServiceImpl implements CatalogsService {
 
     @Autowired
     private CCityRepositoryWrapper cCityRepositoryWrapper;
+
+    @Autowired
+    private CStateRepositoryWrapper cStateRepositoryWrapper;
+
 
     private final String ATTENTION_SCHEDULES = "schedules";
     private final String CITIES = "cities";
@@ -91,14 +96,28 @@ public class CatalogsServiceImpl implements CatalogsService {
 
     @Override
     public ResponseEntity<?> getAddressByPostalCode(String postalCode) {
-        //List<CColony> colonies = cColonyRepositoryWrapper.findAddresByPostalCode(postalCode);
-        Optional<CCity> cities = cCityRepositoryWrapper.findById(1);
-       /* AddressDto address = colonies.stream().map( cColony -> {
-            CatalogDto city = new CatalogDto(cColony.getIdCity().getId(), cColony.getIdCity().getCity());
-            CatalogDto state = new CatalogDto(cColony.getIdCity().getIdState().getId(), cColony.getIdCity().getIdState().getState());
-            ca
-        });*/
-        return new ResponseEntity<>(cities, HttpStatus.OK);
+        Optional<CState> states = cStateRepositoryWrapper.getStateByPostalCode(postalCode);
+        AddressDto addressDto = new AddressDto();
+        if (!states.isPresent())
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        CatalogDto state = new CatalogDto(states.get().getId(), states.get().getState());
+        CatalogDto city = new CatalogDto();
+        List<CatalogDto> colonies = states.get().getCCities().stream()
+                .flatMap(cCity -> cCity.getCColonies().parallelStream())
+                .filter(cColony -> cColony.getPostalCode().equals(postalCode))
+                .map(co -> {
+                    city.setId(co.getIdCity().getId());
+                    city.setDescription(co.getIdCity().getCity());
+                    CatalogDto cat = new CatalogDto();
+                    cat.setId(co.getId());
+                    cat.setDescription(co.getColony());
+                    return cat;
+                })
+                .collect(Collectors.toList());
+        addressDto.setCity(city);
+        addressDto.setState(state);
+        addressDto.setColonies(colonies);
+        return new ResponseEntity<>(addressDto, HttpStatus.OK);
     }
 
     private ResponseEntity<?> getCeEvaluationCenter() {
