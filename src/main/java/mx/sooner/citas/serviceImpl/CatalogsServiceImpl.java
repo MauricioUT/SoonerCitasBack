@@ -3,6 +3,7 @@ package mx.sooner.citas.serviceImpl;
 import mx.sooner.citas.dto.AddressDto;
 import mx.sooner.citas.dto.CatalogDto;
 import mx.sooner.citas.entity.*;
+import mx.sooner.citas.exception.ResourceNotFoundException;
 import mx.sooner.citas.repository.CAttentionScheduleRepository;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.CatalogsService;
@@ -87,7 +88,7 @@ public class CatalogsServiceImpl implements CatalogsService {
         Optional<CState> states = cStateRepositoryWrapper.getStateByPostalCode(postalCode);
         AddressDto addressDto = new AddressDto();
         if (!states.isPresent())
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("dirección valida", " ", " ", new Throwable("getAddressByPostalCode(String postalCode)"), this.getClass().getName());
         CatalogDto state = new CatalogDto(states.get().getId(), states.get().getState());
         CatalogDto city = new CatalogDto();
         List<CatalogDto> colonies = states.get().getCCities().stream()
@@ -111,7 +112,7 @@ public class CatalogsServiceImpl implements CatalogsService {
     private ResponseEntity<?> getCeEvaluationCenter() {
         List<CEvaluationCenter> evaluationCenters = cEvaluationCenterRepositoryWrapper.findAll();
         if (evaluationCenters.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("Centro Evaluacion", " ", " ", new Throwable("getCeEvaluationCenter()"), this.getClass().getName());
         List<CatalogDto> catalog = evaluationCenters.stream().map(ec -> {
             CatalogDto cat = new CatalogDto();
             cat.setId(ec.getId());
@@ -124,7 +125,7 @@ public class CatalogsServiceImpl implements CatalogsService {
     private ResponseEntity<?> getGenders() {
         List<CGender> genders = cGenderRepositoryWrapper.findAll();
         if (genders.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            throw new ResourceNotFoundException("Genero", " ", " ", new Throwable("getGenders()"), this.getClass().getName());
         List<CatalogDto> catalog = genders.stream().map(g -> {
             CatalogDto cat = new CatalogDto();
             cat.setId(g.getId());

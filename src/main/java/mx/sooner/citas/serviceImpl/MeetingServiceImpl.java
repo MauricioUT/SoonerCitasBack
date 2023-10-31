@@ -3,6 +3,8 @@ package mx.sooner.citas.serviceImpl;
 import mx.sooner.citas.dto.MeetingRequestDto;
 import mx.sooner.citas.dto.TMeetingDto;
 import mx.sooner.citas.entity.*;
+import mx.sooner.citas.exception.ExceptionGeneric;
+import mx.sooner.citas.exception.ResourceNotFoundException;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.MeetingService;
 import org.modelmapper.TypeToken;
@@ -14,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,9 +99,10 @@ public class MeetingServiceImpl implements MeetingService {
         Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(id);
 
         if (!meeting.isPresent())
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            throw new ResourceNotFoundException("Reunion", "id", id, new Throwable("getMeeting(Long id)"), this.getClass().getName());
+        ;
 
-        TMeetingDto meetingDto = modelMapper.map(meeting.orElseThrow(() -> new NullPointerException("Falta agregar excepcion personalizada o usar controller advice")
+        TMeetingDto meetingDto = modelMapper.map(meeting.orElseThrow(() -> new ExceptionGeneric("No se pudo castear TMeeting", new Throwable("getMeeting(Long id)"), this.getClass().getName())
         ), TMeetingDto.class);
 
         return new ResponseEntity<>(meetingDto, HttpStatus.OK);
@@ -109,8 +113,8 @@ public class MeetingServiceImpl implements MeetingService {
         List<TMeeting> meetings = tMeetingRepositoryWrapper.findAll();
 
         if (meetings.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
-        List<TMeetingDto> meetingsDto  = modelMapper.map(meetings, new TypeToken<List<TMeetingDto>>() {
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        List<TMeetingDto> meetingsDto = modelMapper.map(meetings, new TypeToken<List<TMeetingDto>>() {
         }.getType());
 
         return new ResponseEntity<>(meetingsDto, HttpStatus.OK);
