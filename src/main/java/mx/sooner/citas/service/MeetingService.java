@@ -7,6 +7,6 @@ public interface MeetingService {
 
     ResponseEntity<?> addMeeting(MeetingRequestDto meetingDto);
 
-    ResponseEntity<?> getMeet(Long id);
-
+    ResponseEntity<?> getMeeting(Long id);
+    ResponseEntity<?> getMeetings();
 }

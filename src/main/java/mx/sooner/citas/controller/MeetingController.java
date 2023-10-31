@@ -21,9 +21,13 @@ public class MeetingController {
         return meetingService.addMeeting(meetingDto);
     }
 
-    @GetMapping(value = "/getMeet", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/getMeeting", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getMeet(@RequestParam Long id) {
-        return meetingService.getMeet(id);
+        return meetingService.getMeeting(id);
     }
 
+    @GetMapping(value = "/getMeetings", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getMeetings() {
+        return meetingService.getMeetings();
+    }
 }

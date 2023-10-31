@@ -5,6 +5,7 @@ import mx.sooner.citas.dto.TMeetingDto;
 import mx.sooner.citas.entity.*;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.MeetingService;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,12 +14,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Transactional
 public class MeetingServiceImpl implements MeetingService {
-
 
     @Autowired
     private CEvaluationCenterRepositoryWrapper cEvaluationCenterRepositoryWrapper;
@@ -34,9 +35,6 @@ public class MeetingServiceImpl implements MeetingService {
 
     @Autowired
     private CColonyRepositoryWrapper cColonyRepositoryWrapper;
-
-    @Autowired
-    private CCityRepositoryWrapper cCityRepositoryWrapper;
 
     @Autowired
     private CStateRepositoryWrapper cStateRepositoryWrapper;
@@ -63,29 +61,29 @@ public class MeetingServiceImpl implements MeetingService {
         Optional<CMeetingStatus> status = this.cMeetingStatusRepositoryWrapper.findById(1);
         Optional<CColony> co = this.cColonyRepositoryWrapper.findById(meetingDto.getIdColony());
         CCity ci = co.get().getIdCity();
-        TMeeting meet = new TMeeting();
-        meet.setIdEvaluationCenter(ec.get());
-        meet.setIdGender(ge.get());
-        meet.setIdNationality(na.get());
-        meet.setIdSchedule(as.get());
-        meet.setIdColony(co.get());
-        meet.setIdCity(ci);
-        meet.setIdState(st.get());
-        meet.setMeetingDate(meetingDto.getMeetingDate());
-        meet.setName(meetingDto.getName());
-        meet.setLastName(meetingDto.getLastName());
-        meet.setMothersLastName(meetingDto.getMotherLastName());
-        meet.setCurp(meetingDto.getCurp());
-        meet.setMail(meetingDto.getMail());
-        meet.setPhone(meetingDto.getPhone());
-        meet.setStreet(meetingDto.getStreet());
-        meet.setNoExt(meetingDto.getNoExt());
-        meet.setNoInt(meetingDto.getNoInt());
-        meet.setIdMeetingStatus(status.get());
-        meet.setRegistrationDate(Instant.now());
-        Long id = tMeetingRepositoryWrapper.save(meet);
+        TMeeting meeting = new TMeeting();
+        meeting.setIdEvaluationCenter(ec.get());
+        meeting.setIdGender(ge.get());
+        meeting.setIdNationality(na.get());
+        meeting.setIdSchedule(as.get());
+        meeting.setIdColony(co.get());
+        meeting.setIdCity(ci);
+        meeting.setIdState(st.get());
+        meeting.setMeetingDate(meetingDto.getMeetingDate());
+        meeting.setName(meetingDto.getName());
+        meeting.setLastName(meetingDto.getLastName());
+        meeting.setMothersLastName(meetingDto.getMotherLastName());
+        meeting.setCurp(meetingDto.getCurp());
+        meeting.setMail(meetingDto.getMail());
+        meeting.setPhone(meetingDto.getPhone());
+        meeting.setStreet(meetingDto.getStreet());
+        meeting.setNoExt(meetingDto.getNoExt());
+        meeting.setNoInt(meetingDto.getNoInt());
+        meeting.setIdMeetingStatus(status.get());
+        meeting.setRegistrationDate(Instant.now());
+        Long id = tMeetingRepositoryWrapper.save(meeting);
         TObservationsMeeting tom = new TObservationsMeeting();
-        tom.setIdMeeting(meet);
+        tom.setIdMeeting(meeting);
         tom.setObservation("");
         tom.setRegistrationDate(Instant.now());
         tObservationsMeetingRepositoryWrapper.save(tom);
@@ -93,16 +91,28 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public ResponseEntity<?> getMeet(Long id) {
+    public ResponseEntity<?> getMeeting(Long id) {
 
-        Optional<TMeeting> meet = tMeetingRepositoryWrapper.findById(id);
+        Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(id);
 
-        if (!meet.isPresent())
+        if (!meeting.isPresent())
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
 
-        TMeetingDto meetingDto = modelMapper.map(meet.orElseThrow(() -> new NullPointerException("Falta agregar excepcion personalizada o usar controller advice")
+        TMeetingDto meetingDto = modelMapper.map(meeting.orElseThrow(() -> new NullPointerException("Falta agregar excepcion personalizada o usar controller advice")
         ), TMeetingDto.class);
 
         return new ResponseEntity<>(meetingDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> getMeetings() {
+        List<TMeeting> meetings = tMeetingRepositoryWrapper.findAll();
+
+        if (meetings.isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        List<TMeetingDto> meetingsDto  = modelMapper.map(meetings, new TypeToken<List<TMeetingDto>>() {
+        }.getType());
+
+        return new ResponseEntity<>(meetingsDto, HttpStatus.OK);
     }
 }
