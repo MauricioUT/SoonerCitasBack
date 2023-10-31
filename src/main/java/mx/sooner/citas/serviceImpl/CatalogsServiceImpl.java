@@ -4,7 +4,6 @@ import mx.sooner.citas.dto.AddressDto;
 import mx.sooner.citas.dto.CatalogDto;
 import mx.sooner.citas.entity.*;
 import mx.sooner.citas.exception.ResourceNotFoundException;
-import mx.sooner.citas.repository.CAttentionScheduleRepository;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.CatalogsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 

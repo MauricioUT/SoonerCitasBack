@@ -1,7 +1,6 @@
 package mx.sooner.citas.repositoryWrapper;
 
 import mx.sooner.citas.entity.CAttentionSchedule;
-import mx.sooner.citas.entity.CNationality;
 import mx.sooner.citas.repository.CAttentionScheduleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

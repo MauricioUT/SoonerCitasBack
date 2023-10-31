@@ -40,7 +40,6 @@ dependencies {
     implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-parent', version: '2.4.0', ext: 'pom'
     implementation group: 'org.modelmapper', name: 'modelmapper', version: '2.4.4'
-
 }
 
 test {
