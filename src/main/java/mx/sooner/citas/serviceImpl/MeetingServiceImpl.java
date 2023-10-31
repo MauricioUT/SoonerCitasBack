@@ -7,13 +7,13 @@ import mx.sooner.citas.exception.ExceptionGeneric;
 import mx.sooner.citas.exception.ResourceNotFoundException;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.MeetingService;
+import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.modelmapper.ModelMapper;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -100,7 +100,6 @@ public class MeetingServiceImpl implements MeetingService {
 
         if (!meeting.isPresent())
             throw new ResourceNotFoundException("Reunion", "id", id, new Throwable("getMeeting(Long id)"), this.getClass().getName());
-        ;
 
         TMeetingDto meetingDto = modelMapper.map(meeting.orElseThrow(() -> new ExceptionGeneric("No se pudo castear TMeeting", new Throwable("getMeeting(Long id)"), this.getClass().getName())
         ), TMeetingDto.class);

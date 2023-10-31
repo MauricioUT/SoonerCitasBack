@@ -1,6 +1,5 @@
 package mx.sooner.citas.repositoryWrapper;
 
-import mx.sooner.citas.entity.CGender;
 import mx.sooner.citas.entity.CNationality;
 import mx.sooner.citas.repository.CNationalityRepository;
 import org.springframework.beans.factory.annotation.Autowired;

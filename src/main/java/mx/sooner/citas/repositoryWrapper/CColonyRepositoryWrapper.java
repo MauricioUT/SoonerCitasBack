@@ -1,6 +1,5 @@
 package mx.sooner.citas.repositoryWrapper;
 
-import mx.sooner.citas.entity.CAttentionSchedule;
 import mx.sooner.citas.entity.CColony;
 import mx.sooner.citas.repository.CColonyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
