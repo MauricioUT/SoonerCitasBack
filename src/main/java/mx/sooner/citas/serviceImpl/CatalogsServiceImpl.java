@@ -31,26 +31,14 @@ public class CatalogsServiceImpl implements CatalogsService {
     private CNationalityRepositoryWrapper cNationalityRepositoryWrapper;
 
     @Autowired
-    private CAttentionScheduleRepository cAttentionScheduleRepository;
-
-    @Autowired
-    private CColonyRepositoryWrapper cColonyRepositoryWrapper;
-
-    @Autowired
-    private CCityRepositoryWrapper cCityRepositoryWrapper;
+    private CAttentionScheduleRepositoryWrapper cAttentionScheduleRepository;
 
     @Autowired
     private CStateRepositoryWrapper cStateRepositoryWrapper;
 
-
-    private final String ATTENTION_SCHEDULES = "schedules";
-    private final String CITIES = "cities";
-    private final String COLONIES = "colonies";
     private final String EVALUATION_CENTERS = "evaluationCenter";
     private final String GENDER = "gender";
-    private final String MEETING_STATUS = "meeting_status";
     private final String NATIONALITIES = "nationalities";
-    private final String STATES = "states";
 
     @Override
     public ResponseEntity<?> getCatalogs(String catalog) {

@@ -36,7 +36,4 @@ public class CCity {
     @OneToMany(mappedBy = "idCity")
     private Set<CColony> cColonies = new LinkedHashSet<>();
 
-    @OneToMany(mappedBy = "idCity")
-    private Set<TMeeting> tMeetings = new LinkedHashSet<>();
-
 }

@@ -32,7 +32,7 @@ public class CNationality implements Serializable {
     @Column(name = "nationality", nullable = false, length = 45)
     private String nationality;
 
-    @OneToMany(mappedBy = "idNationality")
-    private Set<TMeeting> tMeetings = new LinkedHashSet<>();
+    /*@OneToMany(mappedBy = "idNationality")
+    private Set<TMeeting> tMeetings = new LinkedHashSet<>();*/
 
 }

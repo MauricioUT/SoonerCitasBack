@@ -16,12 +16,17 @@ public class CStateRepositoryWrapper {
 
     @Autowired
     private CStateRepository cStateRepository;
+
     public List<CState> findAll() {
         return cStateRepository.findAll();
     }
 
     public Optional<CState> getStateByPostalCode(String cp) {
         return cStateRepository.getStateByPostalCode(cp);
+    }
+
+    public Optional<CState> findById(int id) {
+        return cStateRepository.findById(id);
     }
 
 }

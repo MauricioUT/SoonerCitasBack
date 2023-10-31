@@ -38,17 +38,4 @@ public class CColony {
     @Column(name = "colony", nullable = false, length = 100)
     private String colony;
 
-    @OneToMany(mappedBy = "idColony")
-    private Set<TMeeting> tMeetings = new LinkedHashSet<>();
-
-    @Override
-    public String toString() {
-        return "CColony{" +
-                "id=" + id +
-                ", idCity=" + idCity +
-                ", postalCode='" + postalCode + '\'' +
-                ", colony='" + colony + '\'' +
-                ", tMeetings=" + tMeetings +
-                '}';
-    }
 }

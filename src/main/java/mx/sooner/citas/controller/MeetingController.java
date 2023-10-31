@@ -1,32 +1,24 @@
 package mx.sooner.citas.controller;
 
-
-import mx.sooner.citas.service.CatalogsService;
+import mx.sooner.citas.dto.MeetingRequestDto;
+import mx.sooner.citas.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
-@RequestMapping("/api/catalogs")
+@RequestMapping("/api/meeting")
 public class MeetingController {
 
     @Autowired
-    private CatalogsService catalogsService;
+    private MeetingService meetingService;
 
-    @GetMapping(value = "/catalog/{catalog}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCatalog(@PathVariable String catalog) {
-        return catalogsService.getCatalogs(catalog);
-    }
-
-    @GetMapping(value = "/scheduleByDate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCatalog(@RequestParam Integer id, @RequestParam String date) {
-        return catalogsService.findScheduleByDate(id, date);
-    }
-
-    @GetMapping("/colonies")
-    public ResponseEntity<?> getAddress(@RequestParam  String postalCode) {
-        return catalogsService.getAddressByPostalCode(postalCode);
+    @PostMapping(value = "/add",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getCatalog(@Valid @RequestBody MeetingRequestDto meetingDto) {
+        return meetingService.addMeeting(meetingDto);
     }
 
 }
