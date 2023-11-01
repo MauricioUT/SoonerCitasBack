@@ -19,5 +19,6 @@ public class TObservationsMeetingRepositoryWrapper {
     public void save(TObservationsMeeting oMeet) {
         tObservationsMeetingRepository.save(oMeet);
     }
+
 }
 

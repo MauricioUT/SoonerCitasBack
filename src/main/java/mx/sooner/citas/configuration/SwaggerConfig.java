@@ -1,10 +1,7 @@
 package mx.sooner.citas.configuration;
 
-import mx.sooner.citas.SoonerCitasApplication;
-import org.apache.catalina.core.ApplicationContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;

@@ -123,4 +123,7 @@ public class TMeeting implements Serializable {
     @OneToMany(mappedBy = "idMeeting")
     private Set<TObservationsMeeting> tObservationsMeetings = new LinkedHashSet<>();
 
+    @Column(name = "id_meeting_google", nullable = false)
+    private String idMeetingGoogle;
+
 }
