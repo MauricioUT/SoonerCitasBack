@@ -29,4 +29,10 @@ public class CatalogsController {
         return catalogsService.getAddressByPostalCode(postalCode);
     }
 
+     @GetMapping("/test")
+    public String getTest() {
+        
+        return  "hola";
+    }
+
 }
