@@ -3,27 +3,17 @@ package mx.sooner.citas.configuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-
-import java.util.Arrays;
-
-import static org.springframework.http.HttpMethod.DELETE;
-import static org.springframework.http.HttpMethod.GET;
-import static org.springframework.http.HttpMethod.POST;
-import static org.springframework.http.HttpMethod.PUT;
 
 @Configuration
 @RequiredArgsConstructor
 
 
 
-public class SecurityConfiguration {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public WebMvcConfigurer corsConfigurer() {
         String[] allowDomains = new String[5];
@@ -44,5 +34,17 @@ public class SecurityConfiguration {
                         .allowedOrigins(allowDomains);
             }
         };
+    }
+
+    @Override
+    public void configure(HttpSecurity http) throws Exception {
+
+        http.authorizeRequests()
+                .antMatchers("/_ah/start").permitAll()
+                .and()
+                .antMatcher("/**").authorizeRequests()
+                .anyRequest().authenticated()
+                .and()
+                .oauth2Login();
     }
 }
