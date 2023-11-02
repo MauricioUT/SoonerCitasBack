@@ -24,7 +24,11 @@ public class TMeetingRepositoryWrapper {
 
     public Long save(TMeeting meet) {
         tMeetingRepository.save(meet);
-        tMeetingRepository.flush();
+        return meet.getId();
+    }
+
+    public Long update(TMeeting meet) {
+        tMeetingRepository.saveAndFlush(meet);
         return meet.getId();
     }
 }

@@ -1,6 +1,7 @@
 package mx.sooner.citas.controller;
 
 import mx.sooner.citas.dto.MeetingRequestDto;
+import mx.sooner.citas.dto.UpdateStatusMeetingDto;
 import mx.sooner.citas.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -16,7 +17,7 @@ public class MeetingController {
     @Autowired
     private MeetingService meetingService;
 
-    @PostMapping(value = "/add",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/add", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getCatalog(@Valid @RequestBody MeetingRequestDto meetingDto) {
         return meetingService.addMeeting(meetingDto);
     }
@@ -29,5 +30,10 @@ public class MeetingController {
     @GetMapping(value = "/getMeetings", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<?> getMeetings() {
         return meetingService.getMeetings();
+    }
+
+    @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> updateMeetingStatus(@RequestBody UpdateStatusMeetingDto request) {
+        return meetingService.updateMeetingStatus(request);
     }
 }

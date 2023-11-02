@@ -3,6 +3,7 @@ package mx.sooner.citas.serviceImpl;
 import com.google.api.services.calendar.model.Event;
 import mx.sooner.citas.dto.MeetingRequestDto;
 import mx.sooner.citas.dto.TMeetingDto;
+import mx.sooner.citas.dto.UpdateStatusMeetingDto;
 import mx.sooner.citas.entity.*;
 import mx.sooner.citas.exception.ExceptionGeneric;
 import mx.sooner.citas.exception.ResourceNotFoundException;
@@ -29,7 +30,11 @@ import java.util.Optional;
 @Transactional
 public class MeetingServiceImpl implements MeetingService {
 
-    private final static String DATE_PATTERN ="yyyy-MM-dd'T'HH:mm:ssz";
+    private final static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssz";
+    private final static Integer MEETING_CREATED = 1;
+    private final static Integer MEETING_ATTENDED = 2;
+    private final static Integer MEETING_DELETED = 3;
+
 
     @Autowired
     private CEvaluationCenterRepositoryWrapper cEvaluationCenterRepositoryWrapper;
@@ -68,7 +73,7 @@ public class MeetingServiceImpl implements MeetingService {
         Optional<CNationality> na = this.cNationalityRepositoryWrapper.findById(meetingDto.getIdNationality());
         Optional<CAttentionSchedule> as = this.cAttentionScheduleRepository.findById(meetingDto.getIdSchedule());
         Optional<CState> st = this.cStateRepositoryWrapper.findById(meetingDto.getIdState());
-        Optional<CMeetingStatus> status = this.cMeetingStatusRepositoryWrapper.findById(1);
+        Optional<CMeetingStatus> status = this.cMeetingStatusRepositoryWrapper.findById(MEETING_CREATED);
         Optional<CColony> co = this.cColonyRepositoryWrapper.findById(meetingDto.getIdColony());
         CCity ci = co.get().getIdCity();
         TMeeting meeting = new TMeeting();
@@ -146,5 +151,28 @@ public class MeetingServiceImpl implements MeetingService {
         }.getType());
 
         return new ResponseEntity<>(meetingsDto, HttpStatus.OK);
+    }
+
+    @Override
+    public ResponseEntity<?> updateMeetingStatus(UpdateStatusMeetingDto updateStatusMeetingDto) {
+        Optional<CMeetingStatus> status;
+        Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(updateStatusMeetingDto.getId());
+
+        if (updateStatusMeetingDto.isStatus())
+            status = cMeetingStatusRepositoryWrapper.findById(MEETING_ATTENDED);
+        else
+            status = cMeetingStatusRepositoryWrapper.findById(MEETING_DELETED);
+
+        if (meeting.isEmpty() || status.isEmpty())
+            throw new ResourceNotFoundException("Reunion", "id", updateStatusMeetingDto.getId(), new Throwable("getMeeting(Long id)"), this.getClass().getName());
+
+        meeting.get().setIdMeetingStatus(status.get());
+        meeting.get().getTObservationsMeetings().forEach(obs -> {
+            if (obs.getIdMeeting().getId().equals(updateStatusMeetingDto.getId()))
+                obs.setObservation(updateStatusMeetingDto.getObservations());
+        });
+
+        tMeetingRepositoryWrapper.update(meeting.get());
+        return new ResponseEntity<>(updateStatusMeetingDto.getId(), HttpStatus.OK);
     }
 }
