@@ -172,7 +172,16 @@ public class MeetingServiceImpl implements MeetingService {
                 obs.setObservation(updateStatusMeetingDto.getObservations());
         });
 
-        tMeetingRepositoryWrapper.update(meeting.get());
+        try {
+            if (!updateStatusMeetingDto.isStatus()) {
+                CalendarQuickstart.delete(meeting.get().getIdMeetingGoogle());
+                meeting.get().setIdMeetingGoogle(null);
+            }
+            tMeetingRepositoryWrapper.update(meeting.get());
+        } catch (IOException | GeneralSecurityException e) {
+            throw new ExceptionGeneric("Error al cancelar el evento", new Throwable("updateMeetingStatus()"), this.getClass().getName());
+        }
+
         return new ResponseEntity<>(updateStatusMeetingDto.getId(), HttpStatus.OK);
     }
 }
