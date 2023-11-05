@@ -10,6 +10,7 @@ import mx.sooner.citas.exception.ResourceNotFoundException;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.MeetingService;
 import mx.sooner.citas.util.CalendarQuickstart;
+import org.checkerframework.checker.units.qual.A;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -66,6 +67,9 @@ public class MeetingServiceImpl implements MeetingService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    private CalendarQuickstart calendarQuickstart;
+
     @Override
     public ResponseEntity<?> addMeeting(MeetingRequestDto meetingDto) {
         Optional<CEvaluationCenter> ec = this.cEvaluationCenterRepositoryWrapper.findById(meetingDto.getIdEvaluationCenter());
@@ -104,7 +108,7 @@ public class MeetingServiceImpl implements MeetingService {
         tom.setRegistrationDate(Instant.now());
         tObservationsMeetingRepositoryWrapper.save(tom);
         try {
-            Event event = CalendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1));
+            Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1));
             meeting.setIdMeetingGoogle(event.getId());
             tMeetingRepositoryWrapper.save(meeting);
         } catch (IOException | GeneralSecurityException e) {
@@ -174,7 +178,7 @@ public class MeetingServiceImpl implements MeetingService {
 
         try {
             if (!updateStatusMeetingDto.isStatus()) {
-                CalendarQuickstart.delete(meeting.get().getIdMeetingGoogle());
+                calendarQuickstart.delete(meeting.get().getIdMeetingGoogle());
                 meeting.get().setIdMeetingGoogle(null);
             }
             tMeetingRepositoryWrapper.update(meeting.get());

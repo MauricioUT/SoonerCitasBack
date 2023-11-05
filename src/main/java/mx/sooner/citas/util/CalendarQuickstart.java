@@ -10,11 +10,11 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.util.DateTime;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.api.client.util.store.MemoryDataStoreFactory;
 import com.google.api.services.calendar.Calendar;
 import com.google.api.services.calendar.CalendarScopes;
 import com.google.api.services.calendar.model.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
@@ -38,7 +38,7 @@ public class CalendarQuickstart {
     /**
      * Directory to store authorization tokens for this application.
      */
-    private static final String TOKENS_DIRECTORY_PATH = "tokens";
+    private static final String TOKENS_DIRECTORY_PATH = "tokens/StoredCredential";
 
     /**
      * Global instance of the scopes required by this quickstart.
@@ -61,7 +61,7 @@ public class CalendarQuickstart {
      * @return An authorized Credential object.
      * @throws IOException If the credentials.bk.json file cannot be found.
      */
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT)
             throws IOException {
         // Load client secrets.
         InputStream in = CalendarQuickstart.class.getResourceAsStream(CREDENTIALS_FILE_PATH);
@@ -70,11 +70,12 @@ public class CalendarQuickstart {
         }
         GoogleClientSecrets clientSecrets =
                 GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
+        Resource resource = resourceLoader.getResource(TOKENS_DIRECTORY_PATH);
 
         // Build flow and trigger user authorization request.
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(
                 HTTP_TRANSPORT, JSON_FACTORY, clientSecrets, SCOPES)
-                .setDataStoreFactory(new FileDataStoreFactory(new java.io.File(TOKENS_DIRECTORY_PATH)))
+                .setDataStoreFactory(new FileDataStoreFactory(resource.getFile()))
                 .setAccessType("offline")
                 .build();
         LocalServerReceiver receiver = new LocalServerReceiver.Builder().setPort(8888).build();
@@ -100,7 +101,7 @@ public class CalendarQuickstart {
         return credential;
     }
 
-    public static Event create(String mail, String startDate, String endDate) throws IOException, GeneralSecurityException {
+    public  Event create(String mail, String startDate, String endDate) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service =
@@ -141,7 +142,7 @@ public class CalendarQuickstart {
      * @return
      * @throws IOException
      */
-    public static Event createEvent(Calendar service, String mail, String startDate, String endDate) throws IOException {
+    public  Event createEvent(Calendar service, String mail, String startDate, String endDate) throws IOException {
 
         Event event = new Event()
                 .setSummary("Prueba encabezado")
@@ -183,7 +184,7 @@ public class CalendarQuickstart {
         return event;
     }
 
-    public static void delete(String idEvent) throws IOException, GeneralSecurityException {
+    public  void delete(String idEvent) throws IOException, GeneralSecurityException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
