@@ -55,5 +55,5 @@
 FROM  openjdk:15
 EXPOSE 8080
 RUN mkdir -p /app/
-ADD *.jar /app/sooner.jar
+ADD /build/libs/sooner.jar /app/sooner.jar
 ENTRYPOINT ["java", "-jar", "/app/sooner.jar"]
