@@ -1,0 +1,59 @@
+# temp container to build using gradle
+# FROM gradle:5.3.0-jdk-alpine AS TEMP_BUILD_IMAGE
+# ENV APP_HOME=/usr/app/
+# WORKDIR $APP_HOME
+# COPY build.gradle settings.gradle $APP_HOME
+  
+# COPY gradle $APP_HOME/gradle
+# COPY --chown=gradle:gradle . /home/gradle/src
+# USER root
+# RUN chown -R gradle /home/gradle/src
+    
+# RUN gradle build || return 0
+# COPY . .
+# RUN gradle clean build
+    
+# # actual container
+# FRO
+
+
+# FROM gradle:7.6 AS BUILD
+# WORKDIR /usr/app/
+# COPY . . 
+# RUN gradle build
+
+# FROM openjdk:15
+# ENV JAR_NAME=app.jar
+# ENV APP_HOME=/usr/app/
+# WORKDIR $APP_HOME
+# COPY --from=BUILD $APP_HOME .
+# EXPOSE 8080
+# ENTRYPOINT exec java -jar $APP_HOME/build/libs/$SoonerCitasBack-1.0-SNAPSHOT.jar
+
+# dos
+# Package stage
+# FROM openjdk:15
+# WORKDIR /app
+
+# CMD ["./gradlew", "clean", "bootJar"]
+
+# COPY *.jar .
+
+# EXPOSE 8080
+
+
+# dos
+# COPY *.jar .
+
+# EXPOSE 8080
+
+# ENTRYPOINT [ "java","-jar","sooner.jar" ]
+# CMD ["java", "-jar", "sooner.jar"]
+
+
+# cuatro
+FROM  openjdk:15
+EXPOSE 8080
+RUN mkdir -p /app/
+ADD *.jar /app/sooner.jar
+ENTRYPOINT ["java", "-jar", "/app/sooner.jar"]
