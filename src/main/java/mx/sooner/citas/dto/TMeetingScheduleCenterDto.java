@@ -1,9 +1,9 @@
 package mx.sooner.citas.dto;
 
-import lombok.*;
-import mx.sooner.citas.dto.CAttentionScheduleDto;
-import mx.sooner.citas.dto.CEvaluationCenterDto;
-import mx.sooner.citas.dto.CMeetingStatusDto;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import mx.sooner.citas.entity.TMeetingScheduleCenter;
 
 import javax.validation.constraints.NotNull;

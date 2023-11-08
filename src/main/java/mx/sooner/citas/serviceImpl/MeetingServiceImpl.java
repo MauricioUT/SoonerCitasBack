@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.sql.SQLException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -118,13 +119,12 @@ public class MeetingServiceImpl implements MeetingService {
         tmsc.setMeetingDate(meetingDto.getMeetingDate());
         tmsc.setIdSchedule(as.get());
         tmsc.setIdEvaluationCenter(ec.get());
-        tMeetingScheduleCenterRepositoryWrapper.save(tmsc);
         try {
+            tMeetingScheduleCenterRepositoryWrapper.save(tmsc);
             Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1));
             meeting.setIdMeetingGoogle(event.getId());
             tMeetingRepositoryWrapper.save(meeting);
-        } catch (IOException | GeneralSecurityException e) {
-            e.printStackTrace();
+        } catch (SQLException | IOException | GeneralSecurityException e) {
             throw new ExceptionGeneric("Error al agendar cita en calendario", new Throwable("addMeeting()"), this.getClass().getName());
         }
         return new ResponseEntity<>(id, HttpStatus.OK);

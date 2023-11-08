@@ -6,7 +6,6 @@ import mx.sooner.citas.exception.ExceptionGeneric;
 import mx.sooner.citas.exception.ResourceNotFoundException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,7 +23,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 

@@ -5,6 +5,7 @@ import mx.sooner.citas.repository.TMeetingScheduleCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,8 @@ public class TMeetingScheduleCenterRepositoryWrapper {
         return tMeetingScheduleCenterRepository.findById(id);
     }
 
-    public Long save(TMeetingScheduleCenter meet) {
-        tMeetingScheduleCenterRepository.save(meet);
+    public Long save(TMeetingScheduleCenter meet) throws SQLException {
+        tMeetingScheduleCenterRepository.saveAndFlush(meet);
         return meet.getId();
     }
 
