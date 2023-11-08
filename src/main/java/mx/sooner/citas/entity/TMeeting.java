@@ -8,40 +8,19 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.time.Instant;
-import java.time.LocalDate;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "T_MEETINGS")
-public class TMeeting implements Serializable {
-
-    private static final long serialVersionUID = -5607417599841394138L;
-
+@Table(name = "t_meetings")
+public class TMeeting {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id_evaluation_center", nullable = false)
-    private CEvaluationCenter idEvaluationCenter;
-
-    @NotNull
-    @Column(name = "meeting_date", nullable = false)
-    private LocalDate meetingDate;
-
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id_schedule", nullable = false)
-    private CAttentionSchedule idSchedule;
 
     @Size(max = 50)
     @NotNull
@@ -64,7 +43,7 @@ public class TMeeting implements Serializable {
     private String curp;
 
     @NotNull
-    @ManyToOne(fetch =  FetchType.EAGER, optional = false)
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_gender", nullable = false)
     private CGender idGender;
 
@@ -107,12 +86,10 @@ public class TMeeting implements Serializable {
     @Column(name = "no_ext", nullable = false)
     private Integer noExt;
 
-    @NotNull
-    @Column(name = "no_int", nullable = false)
+    @Column(name = "no_int")
     private Integer noInt;
 
-    @NotNull
-    @Column(name = "registration_date", nullable = false)
+    @Column(name = "registration_date")
     private Instant registrationDate;
 
     @NotNull
@@ -120,10 +97,23 @@ public class TMeeting implements Serializable {
     @JoinColumn(name = "id_meeting_status", nullable = false)
     private CMeetingStatus idMeetingStatus;
 
-    @OneToMany(mappedBy = "idMeeting")
-    private Set<TObservationsMeeting> tObservationsMeetings = new LinkedHashSet<>();
-
-    @Column(name = "id_meeting_google", nullable = false)
+    @Size(max = 100)
+    @Column(name = "id_meeting_google", length = 100)
     private String idMeetingGoogle;
+
+    @NotNull
+    @Column(name = "`read_write`", nullable = false)
+    private Byte readWrite;
+
+    @NotNull
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "id_education", nullable = false)
+    private CEducationLevel idEducation;
+
+    @OneToOne(mappedBy = "tMeetings")
+    private TMeetingScheduleCenter tMeetingScheduleCenter;
+
+    @OneToOne(mappedBy = "idMeeting")
+    private TObservationsMeeting tObservationsMeeting;
 
 }

@@ -16,24 +16,19 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "c_evaluation_centers")
-public class CEvaluationCenter {
+@Table(name = "c_education_level")
+public class CEducationLevel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
-    @Size(max = 100)
+    @Size(max = 50)
     @NotNull
-    @Column(name = "evaluation_center", nullable = false, length = 100)
-    private String evaluationCenter;
+    @Column(name = "level", nullable = false, length = 50)
+    private String level;
 
-    @Size(max = 500)
-    @NotNull
-    @Column(name = "location", nullable = false, length = 500)
-    private String location;
-
-    @OneToMany(mappedBy = "idEvaluationCenter")
-    private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
+    @OneToMany(mappedBy = "idEducation")
+    private Set<TMeeting> tMeetings = new LinkedHashSet<>();
 
 }

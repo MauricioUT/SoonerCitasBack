@@ -8,19 +8,16 @@ import lombok.Setter;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.io.Serializable;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Getter
+@Setter
 @Entity
-@Table(name = "C_ATTENTION_SCHEDULES")
-public class CAttentionSchedule implements Serializable {
-
-    private static final long serialVersionUID = -3468127618090112951L;
-
+@Table(name = "c_attention_schedules")
+public class CAttentionSchedule {
     @Id
     @Column(name = "id", nullable = false)
     private Integer id;
@@ -39,5 +36,6 @@ public class CAttentionSchedule implements Serializable {
     private Boolean weeklySchedule = false;
 
     @OneToMany(mappedBy = "idSchedule")
-    private Set<TMeeting> tMeeting;
+    private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
+
 }

@@ -13,8 +13,4 @@ import java.util.List;
 
 public interface CColonyRepository extends JpaRepository<CColony, Integer> {
     List<CColony> findByPostalCode(String postalCode);
-
-    @Query("SELECT col FROM CColony col inner join CCity ci on ci.id = col.idCity.id WHERE col.postalCode = :postalCode")
-    List<CAttentionSchedule> findAddresByPostalCode(@Param("postalCode") String postalCode);
-
 }

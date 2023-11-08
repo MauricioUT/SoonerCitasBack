@@ -9,6 +9,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -30,7 +32,7 @@ public class CNationality implements Serializable {
     @Column(name = "nationality", nullable = false, length = 45)
     private String nationality;
 
-    /*@OneToMany(mappedBy = "idNationality")
-    private Set<TMeeting> tMeetings = new LinkedHashSet<>();*/
+    @OneToMany(mappedBy = "idNationality")
+    private Set<TMeeting> tMeetings = new LinkedHashSet<>();
 
 }
