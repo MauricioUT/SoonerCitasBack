@@ -10,7 +10,6 @@ import mx.sooner.citas.exception.ResourceNotFoundException;
 import mx.sooner.citas.repositoryWrapper.*;
 import mx.sooner.citas.service.MeetingService;
 import mx.sooner.citas.util.CalendarQuickstart;
-import org.checkerframework.checker.units.qual.A;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +64,12 @@ public class MeetingServiceImpl implements MeetingService {
     private TObservationsMeetingRepositoryWrapper tObservationsMeetingRepositoryWrapper;
 
     @Autowired
+    private TMeetingScheduleCenterRepositoryWrapper tMeetingScheduleCenterRepositoryWrapper;
+
+    @Autowired
+    private CEducationLevelRepositoryWrapper cEducationLevelRepositoryWrapper;
+
+    @Autowired
     private ModelMapper modelMapper;
 
     @Autowired
@@ -79,16 +84,15 @@ public class MeetingServiceImpl implements MeetingService {
         Optional<CState> st = this.cStateRepositoryWrapper.findById(meetingDto.getIdState());
         Optional<CMeetingStatus> status = this.cMeetingStatusRepositoryWrapper.findById(MEETING_CREATED);
         Optional<CColony> co = this.cColonyRepositoryWrapper.findById(meetingDto.getIdColony());
+        Optional<CEducationLevel> cel = this.cEducationLevelRepositoryWrapper.findById(meetingDto.getIdEducation());
+
         CCity ci = co.get().getIdCity();
         TMeeting meeting = new TMeeting();
-       // meeting.setIdEvaluationCenter(ec.get());
         meeting.setIdGender(ge.get());
         meeting.setIdNationality(na.get());
-      //  meeting.setIdSchedule(as.get());
         meeting.setIdColony(co.get());
         meeting.setIdCity(ci);
         meeting.setIdState(st.get());
-        //meeting.setMeetingDate(meetingDto.getMeetingDate());
         meeting.setName(meetingDto.getName());
         meeting.setLastName(meetingDto.getLastName());
         meeting.setMothersLastName(meetingDto.getMotherLastName());
@@ -98,15 +102,23 @@ public class MeetingServiceImpl implements MeetingService {
         meeting.setStreet(meetingDto.getStreet());
         meeting.setNoExt(meetingDto.getNoExt());
         meeting.setNoInt(meetingDto.getNoInt());
-        meeting.setIdMeetingStatus(status.get());
         meeting.setRegistrationDate(Instant.now());
+        meeting.setReadWrite(meetingDto.isReadWrite());
+        meeting.setIdEducation(cel.get());
         List<String> fechas = getScheduleCalendar(as.get(), meetingDto.getMeetingDate());
         Long id = tMeetingRepositoryWrapper.save(meeting);
         TObservationsMeeting tom = new TObservationsMeeting();
-        tom.setIdMeeting(meeting);
+        tom.setTMeetings(meeting);
         tom.setObservation("");
         tom.setRegistrationDate(Instant.now());
         tObservationsMeetingRepositoryWrapper.save(tom);
+        TMeetingScheduleCenter tmsc = new TMeetingScheduleCenter();
+        tmsc.setTMeetings(meeting);
+        tmsc.setIdMeetingStatus(status.get());
+        tmsc.setMeetingDate(meetingDto.getMeetingDate());
+        tmsc.setIdSchedule(as.get());
+        tmsc.setIdEvaluationCenter(ec.get());
+        tMeetingScheduleCenterRepositoryWrapper.save(tmsc);
         try {
             Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1));
             meeting.setIdMeetingGoogle(event.getId());
@@ -157,6 +169,12 @@ public class MeetingServiceImpl implements MeetingService {
         return new ResponseEntity<>(meetingsDto, HttpStatus.OK);
     }
 
+    /**
+     * if status is false the meeting status will change to rechazada
+     *
+     * @param updateStatusMeetingDto
+     * @return
+     */
     @Override
     public ResponseEntity<?> updateMeetingStatus(UpdateStatusMeetingDto updateStatusMeetingDto) {
         Optional<CMeetingStatus> status;
@@ -170,12 +188,8 @@ public class MeetingServiceImpl implements MeetingService {
         if (meeting.isEmpty() || status.isEmpty())
             throw new ResourceNotFoundException("Reunion", "id", updateStatusMeetingDto.getId(), new Throwable("getMeeting(Long id)"), this.getClass().getName());
 
-        meeting.get().setIdMeetingStatus(status.get());
-       /* meeting.get().getTObservationsMeetings().forEach(obs -> {
-            if (obs.getIdMeeting().getId().equals(updateStatusMeetingDto.getId()))
-                obs.setObservation(updateStatusMeetingDto.getObservations());
-        });*/
-
+        meeting.get().getTMeetingScheduleCenter().setIdMeetingStatus(status.get());
+        meeting.get().getTObservationsMeeting().setObservation(updateStatusMeetingDto.getObservations());
         try {
             if (!updateStatusMeetingDto.isStatus()) {
                 calendarQuickstart.delete(meeting.get().getIdMeetingGoogle());

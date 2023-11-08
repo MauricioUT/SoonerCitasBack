@@ -10,6 +10,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.jpa.JpaSystemException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -23,6 +24,7 @@ import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Collections;
 
@@ -116,15 +118,15 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
         return buildResponseEntity(err, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(DataIntegrityViolationException.class)
-    ResponseEntity<Object> onResourceSameScheduleByCE(DataIntegrityViolationException e) {
+    @ExceptionHandler(JpaSystemException.class)
+    ResponseEntity<Object> onResourceSameScheduleByCE(JpaSystemException e) {
         String message;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         e.printStackTrace(ps);
         ps.close();
         if (e.getCause() != null && e.getCause().getMessage() != null)
-            message = "Ya se encuentrá una cita agendada";
+            message = "Ya se encuentrán con el limite de citas agendadas para este horario";
         else if (e.getMessage() != null)
             message = e.getMessage();
         else message = e.toString();

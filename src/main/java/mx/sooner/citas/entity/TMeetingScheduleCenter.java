@@ -39,4 +39,9 @@ public class TMeetingScheduleCenter {
     @Column(name = "meeting_date", nullable = false)
     private LocalDate meetingDate;
 
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_meeting_status", nullable = false)
+    private CMeetingStatus idMeetingStatus;
+
 }

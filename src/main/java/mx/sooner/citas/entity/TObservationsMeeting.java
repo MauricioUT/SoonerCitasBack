@@ -18,14 +18,13 @@ import java.time.Instant;
 @Table(name = "t_observations_meeting")
 public class TObservationsMeeting {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id_meeting", nullable = false)
     private Long id;
 
-    @NotNull
-    @OneToOne(fetch = FetchType.EAGER, optional = false)
+    @MapsId
+    @OneToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_meeting", nullable = false)
-    private TMeeting idMeeting;
+    private TMeeting tMeetings;
 
     @Size(max = 500)
     @NotNull

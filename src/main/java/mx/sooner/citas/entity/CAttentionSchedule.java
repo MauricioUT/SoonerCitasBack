@@ -35,7 +35,7 @@ public class CAttentionSchedule {
     @Column(name = "weekly_schedule", nullable = false)
     private Boolean weeklySchedule = false;
 
-    @OneToMany(mappedBy = "idSchedule")
-    private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
+    /*@OneToMany(mappedBy = "idSchedule")
+    private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();*/
 
 }

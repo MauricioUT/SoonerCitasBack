@@ -53,4 +53,10 @@ public class MeetingRequestDto implements Serializable {
     private int noExt;
 
     private int noInt;
+
+    private int idEducation;
+
+    private boolean readWrite;
+
+    private String urlDocument;
 }

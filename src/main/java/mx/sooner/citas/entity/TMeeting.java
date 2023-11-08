@@ -92,18 +92,13 @@ public class TMeeting {
     @Column(name = "registration_date")
     private Instant registrationDate;
 
-    @NotNull
-    @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name = "id_meeting_status", nullable = false)
-    private CMeetingStatus idMeetingStatus;
-
     @Size(max = 100)
     @Column(name = "id_meeting_google", length = 100)
     private String idMeetingGoogle;
 
     @NotNull
     @Column(name = "`read_write`", nullable = false)
-    private Byte readWrite;
+    private Boolean readWrite;
 
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
@@ -113,7 +108,7 @@ public class TMeeting {
     @OneToOne(mappedBy = "tMeetings")
     private TMeetingScheduleCenter tMeetingScheduleCenter;
 
-    @OneToOne(mappedBy = "idMeeting")
+    @OneToOne(mappedBy = "tMeetings")
     private TObservationsMeeting tObservationsMeeting;
 
 }
