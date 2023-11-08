@@ -16,9 +16,6 @@ public class CColonyRepositoryWrapper {
     @Autowired
     private CColonyRepository cColonyRepository;
 
-    public List<CColony> findAddresByPostalCode(String postalCode) {
-        return cColonyRepository.findByPostalCode(postalCode);
-    }
     public Optional<CColony> findById(int id){
         return cColonyRepository.findById(id);
     }

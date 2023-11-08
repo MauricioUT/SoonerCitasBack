@@ -33,6 +33,10 @@ public class CEvaluationCenter {
     @Column(name = "location", nullable = false, length = 500)
     private String location;
 
+    @NotNull
+    @Column(name = "no_max_meetings", nullable = false)
+    private Integer noMaxMeetings;
+
     @OneToMany(mappedBy = "idEvaluationCenter")
     private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
 

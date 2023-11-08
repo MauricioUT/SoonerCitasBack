@@ -2,6 +2,7 @@ package mx.sooner.citas.serviceImpl;
 
 import mx.sooner.citas.dto.AddressDto;
 import mx.sooner.citas.dto.CatalogDto;
+import mx.sooner.citas.dto.EvaluationCenterDto;
 import mx.sooner.citas.entity.*;
 import mx.sooner.citas.exception.ResourceNotFoundException;
 import mx.sooner.citas.repositoryWrapper.*;
@@ -35,9 +36,14 @@ public class CatalogsServiceImpl implements CatalogsService {
     @Autowired
     private CStateRepositoryWrapper cStateRepositoryWrapper;
 
-    private final String EVALUATION_CENTERS = "evaluationCenter";
-    private final String GENDER = "gender";
-    private final String NATIONALITIES = "nationalities";
+    @Autowired
+    private CEducationLevelRepositoryWrapper cEducationLevelRepositoryWrapper;
+
+    private static final String EVALUATION_CENTERS = "evaluationCenter";
+    private static final String GENDER = "gender";
+    private static final String NATIONALITIES = "nationalities";
+    private static final String EDUCATION_LEVEL = "educationLevel";
+
 
     @Override
     public ResponseEntity<?> getCatalogs(String catalog) {
@@ -51,6 +57,9 @@ public class CatalogsServiceImpl implements CatalogsService {
                 break;
             case NATIONALITIES:
                 responseEntity = getNationalities();
+                break;
+            case EDUCATION_LEVEL:
+                responseEntity = getEducationLevel();
                 break;
             default:
                 responseEntity = new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
@@ -66,9 +75,15 @@ public class CatalogsServiceImpl implements CatalogsService {
      * @return
      */
     @Override
-    public ResponseEntity<?> findScheduleByDate(Integer id, String date) {
+    public ResponseEntity<?> findScheduleByDate(Integer idCentroEval, String date) {
         LocalDate localDate = LocalDate.parse(date);
-        List<CAttentionSchedule> cAttentionSchedules = cAttentionScheduleRepository.findScheduleByDate(localDate, id);
+        Optional<CEvaluationCenter> evaluationCenter = cEvaluationCenterRepositoryWrapper.findById(idCentroEval);
+
+        if (evaluationCenter.isEmpty())
+            throw new ResourceNotFoundException("Centro Evaluacion", " ", " ", new Throwable("getCeEvaluationCenter()"), this.getClass().getName());
+
+        List<CAttentionSchedule> cAttentionSchedules = cAttentionScheduleRepository.findScheduleByDate(localDate, idCentroEval, Long.valueOf(evaluationCenter.get().getNoMaxMeetings()));
+
         if (cAttentionSchedules.isEmpty())
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         List<CatalogDto> catalog = cAttentionSchedules.stream().map(ca -> {
@@ -111,10 +126,11 @@ public class CatalogsServiceImpl implements CatalogsService {
         List<CEvaluationCenter> evaluationCenters = cEvaluationCenterRepositoryWrapper.findAll();
         if (evaluationCenters.isEmpty())
             throw new ResourceNotFoundException("Centro Evaluacion", " ", " ", new Throwable("getCeEvaluationCenter()"), this.getClass().getName());
-        List<CatalogDto> catalog = evaluationCenters.stream().map(ec -> {
-            CatalogDto cat = new CatalogDto();
+        List<EvaluationCenterDto> catalog = evaluationCenters.stream().map(ec -> {
+            EvaluationCenterDto cat = new EvaluationCenterDto();
             cat.setId(ec.getId());
             cat.setDescription(ec.getEvaluationCenter());
+            cat.setLocation(ec.getLocation());
             return cat;
         }).collect(Collectors.toList());
         return new ResponseEntity<>(catalog, HttpStatus.OK);
@@ -141,6 +157,19 @@ public class CatalogsServiceImpl implements CatalogsService {
             CatalogDto cat = new CatalogDto();
             cat.setId(n.getId());
             cat.setDescription(n.getNationality());
+            return cat;
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(catalog, HttpStatus.OK);
+    }
+
+    private ResponseEntity<?> getEducationLevel() {
+        List<CEducationLevel> levels = cEducationLevelRepositoryWrapper.findAll();
+        if (levels.isEmpty())
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        List<CatalogDto> catalog = levels.stream().map(n -> {
+            CatalogDto cat = new CatalogDto();
+            cat.setId(n.getId());
+            cat.setDescription(n.getLevel());
             return cat;
         }).collect(Collectors.toList());
         return new ResponseEntity<>(catalog, HttpStatus.OK);

@@ -18,9 +18,9 @@ public class TObservationsMeetingRepositoryWrapper {
         return tObservationsMeetingRepository.findAll();
     }
 
-    public Optional<TObservationsMeeting> findByIdMeeting(Long id) {
+  /*  public Optional<TObservationsMeeting> findByIdMeeting(Long id) {
         return tObservationsMeetingRepository.findByIdMeeting_Id(id);
-    }
+    }*/
 
 
     public void save(TObservationsMeeting oMeet) {

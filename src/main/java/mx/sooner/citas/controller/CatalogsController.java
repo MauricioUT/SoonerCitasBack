@@ -20,8 +20,8 @@ public class CatalogsController {
     }
 
     @GetMapping(value = "/scheduleByDate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getCatalog(@RequestParam Integer id, @RequestParam String date) {
-        return catalogsService.findScheduleByDate(id, date);
+    public ResponseEntity<?> getCatalog(@RequestParam Integer idCentroEval, @RequestParam String date) {
+        return catalogsService.findScheduleByDate(idCentroEval, date);
     }
 
     @GetMapping("/colonies")

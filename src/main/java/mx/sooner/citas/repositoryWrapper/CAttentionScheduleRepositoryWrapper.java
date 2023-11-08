@@ -16,11 +16,12 @@ public class CAttentionScheduleRepositoryWrapper {
 
     @Autowired
     private CAttentionScheduleRepository cAttentionScheduleRepository;
-    public List<CAttentionSchedule> findScheduleByDate(LocalDate date, Integer idEvaluationCenter) {
-        return cAttentionScheduleRepository.findScheduleByDate(date, idEvaluationCenter);
+
+    public List<CAttentionSchedule> findScheduleByDate(LocalDate date, Integer idEvaluationCenter, Long noEvalCent) {
+        return cAttentionScheduleRepository.findScheduleByDate(date, idEvaluationCenter, noEvalCent);
     }
 
-    public Optional<CAttentionSchedule> findById(int id){
+    public Optional<CAttentionSchedule> findById(int id) {
         return cAttentionScheduleRepository.findById(id);
     }
 }

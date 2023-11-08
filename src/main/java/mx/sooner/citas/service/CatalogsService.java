@@ -6,6 +6,6 @@ public interface CatalogsService {
 
     ResponseEntity<?> getCatalogs(String catalog);
 
-    ResponseEntity<?> findScheduleByDate(Integer id, String date);
+    ResponseEntity<?> findScheduleByDate(Integer idCentroEval, String date);
     ResponseEntity<?> getAddressByPostalCode(String postalCode);
 }

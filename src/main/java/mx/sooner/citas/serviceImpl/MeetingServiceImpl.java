@@ -81,14 +81,14 @@ public class MeetingServiceImpl implements MeetingService {
         Optional<CColony> co = this.cColonyRepositoryWrapper.findById(meetingDto.getIdColony());
         CCity ci = co.get().getIdCity();
         TMeeting meeting = new TMeeting();
-        meeting.setIdEvaluationCenter(ec.get());
+       // meeting.setIdEvaluationCenter(ec.get());
         meeting.setIdGender(ge.get());
         meeting.setIdNationality(na.get());
-        meeting.setIdSchedule(as.get());
+      //  meeting.setIdSchedule(as.get());
         meeting.setIdColony(co.get());
         meeting.setIdCity(ci);
         meeting.setIdState(st.get());
-        meeting.setMeetingDate(meetingDto.getMeetingDate());
+        //meeting.setMeetingDate(meetingDto.getMeetingDate());
         meeting.setName(meetingDto.getName());
         meeting.setLastName(meetingDto.getLastName());
         meeting.setMothersLastName(meetingDto.getMotherLastName());
@@ -171,10 +171,10 @@ public class MeetingServiceImpl implements MeetingService {
             throw new ResourceNotFoundException("Reunion", "id", updateStatusMeetingDto.getId(), new Throwable("getMeeting(Long id)"), this.getClass().getName());
 
         meeting.get().setIdMeetingStatus(status.get());
-        meeting.get().getTObservationsMeetings().forEach(obs -> {
+       /* meeting.get().getTObservationsMeetings().forEach(obs -> {
             if (obs.getIdMeeting().getId().equals(updateStatusMeetingDto.getId()))
                 obs.setObservation(updateStatusMeetingDto.getObservations());
-        });
+        });*/
 
         try {
             if (!updateStatusMeetingDto.isStatus()) {
