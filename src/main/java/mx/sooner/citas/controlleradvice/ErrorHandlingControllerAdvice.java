@@ -119,6 +119,7 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
     @ExceptionHandler(JpaSystemException.class)
     ResponseEntity<Object> onResourceSameScheduleByCE(JpaSystemException e) {
         String message;
+        e.printStackTrace();
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         e.printStackTrace(ps);

@@ -37,6 +37,11 @@ public class CEvaluationCenter {
     @Column(name = "no_max_meetings", nullable = false)
     private Integer noMaxMeetings;
 
+    @Size(max = 100)
+    @NotNull
+    @Column(name = "google_maps_location", nullable = false, length = 100)
+    private String googleMapsLocation;
+
     @OneToMany(mappedBy = "idEvaluationCenter")
     private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
 

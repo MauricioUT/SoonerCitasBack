@@ -26,6 +26,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -106,8 +107,9 @@ public class MeetingServiceImpl implements MeetingService {
         meeting.setRegistrationDate(Instant.now());
         meeting.setReadWrite(meetingDto.isReadWrite());
         meeting.setIdEducation(cel.get());
+        meeting.setUuid(UUID.randomUUID().toString());
         List<String> fechas = getScheduleCalendar(as.get(), meetingDto.getMeetingDate());
-        Long id = tMeetingRepositoryWrapper.save(meeting);
+        tMeetingRepositoryWrapper.save(meeting);
         TObservationsMeeting tom = new TObservationsMeeting();
         tom.setTMeetings(meeting);
         tom.setObservation("");
@@ -121,13 +123,13 @@ public class MeetingServiceImpl implements MeetingService {
         tmsc.setIdEvaluationCenter(ec.get());
         try {
             tMeetingScheduleCenterRepositoryWrapper.save(tmsc);
-            Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1));
+            Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1), tmsc);
             meeting.setIdMeetingGoogle(event.getId());
             tMeetingRepositoryWrapper.save(meeting);
         } catch (SQLException | IOException | GeneralSecurityException e) {
             throw new ExceptionGeneric("Error al agendar cita en calendario", new Throwable("addMeeting()"), this.getClass().getName());
         }
-        return new ResponseEntity<>(id, HttpStatus.OK);
+        return new ResponseEntity<>(meeting.getUuid(), HttpStatus.OK);
     }
 
     public List<String> getScheduleCalendar(CAttentionSchedule schedule, LocalDate date) {
@@ -144,7 +146,7 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public ResponseEntity<?> getMeeting(Long id) {
+    public ResponseEntity<?> getMeeting(String id) {
 
         Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(id);
 

@@ -9,6 +9,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.time.Instant;
+import java.util.UUID;
 
 /**
  * DTO for {@link mx.sooner.citas.entity.TMeeting}
@@ -19,7 +20,7 @@ import java.time.Instant;
 @NoArgsConstructor
 public class TMeetingDto implements Serializable {
     private static final long serialVersionUID = 594689750120269803L;
-    private Long id;
+    private String uuid;
     @NotNull
     @Size(max = 50)
     private String name;

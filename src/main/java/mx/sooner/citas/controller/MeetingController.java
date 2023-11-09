@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/meeting")
@@ -23,7 +24,7 @@ public class MeetingController {
     }
 
     @GetMapping(value = "/getMeeting", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getMeet(@RequestParam Long id) {
+    public ResponseEntity<?> getMeet(@RequestParam String id) {
         return meetingService.getMeeting(id);
     }
 

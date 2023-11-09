@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class TMeetingRepositoryWrapper {
@@ -18,8 +19,8 @@ public class TMeetingRepositoryWrapper {
         return tMeetingRepository.findAll();
     }
 
-    public Optional<TMeeting> findById(Long id) {
-        return tMeetingRepository.findById(id);
+    public Optional<TMeeting> findById(String id) {
+        return tMeetingRepository.findByUuid(id);
     }
 
     public Long save(TMeeting meet) {

@@ -100,6 +100,10 @@ public class TMeeting {
     @Column(name = "`read_write`", nullable = false)
     private Boolean readWrite;
 
+    @Size(max = 40)
+    @Column(name = "uuid", length = 40)
+    private String uuid;
+
     @NotNull
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "id_education", nullable = false)

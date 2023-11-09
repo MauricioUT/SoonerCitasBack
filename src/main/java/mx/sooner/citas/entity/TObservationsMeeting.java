@@ -17,6 +17,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "t_observations_meeting")
 public class TObservationsMeeting {
+
     @Id
     @Column(name = "id_meeting", nullable = false)
     private Long id;
