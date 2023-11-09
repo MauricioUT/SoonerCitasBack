@@ -58,5 +58,5 @@ public class MeetingRequestDto implements Serializable {
 
     private boolean readWrite;
 
-    private String urlDocument;
+    private String urlBase;
 }

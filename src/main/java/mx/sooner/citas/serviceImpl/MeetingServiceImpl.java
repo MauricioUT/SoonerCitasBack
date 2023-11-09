@@ -123,7 +123,7 @@ public class MeetingServiceImpl implements MeetingService {
         tmsc.setIdEvaluationCenter(ec.get());
         try {
             tMeetingScheduleCenterRepositoryWrapper.save(tmsc);
-            Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1), tmsc);
+            Event event = calendarQuickstart.create(meetingDto.getMail(), fechas.get(0), fechas.get(1), tmsc, meetingDto.getUrlBase());
             meeting.setIdMeetingGoogle(event.getId());
             tMeetingRepositoryWrapper.save(meeting);
         } catch (SQLException | IOException | GeneralSecurityException e) {

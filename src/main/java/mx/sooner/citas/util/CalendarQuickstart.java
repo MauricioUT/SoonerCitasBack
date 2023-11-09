@@ -100,7 +100,7 @@ public class CalendarQuickstart {
         return credential;
     }
 
-    public  Event create(String mail, String startDate, String endDate, TMeetingScheduleCenter meeting) throws IOException, GeneralSecurityException {
+    public Event create(String mail, String startDate, String endDate, TMeetingScheduleCenter meeting, String urlFront) throws IOException, GeneralSecurityException {
         // Build a new authorized API client service.
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service =
@@ -119,7 +119,7 @@ public class CalendarQuickstart {
         List<Event> items = events.getItems();
         if (items.isEmpty()) {
             System.out.println("No upcoming events found.");
-            return createEvent(service, mail, startDate, endDate, meeting);
+            return createEvent(service, mail, startDate, endDate, meeting, urlFront);
         } else {
             System.out.println("Upcoming events");
             for (Event event : items) {
@@ -129,7 +129,7 @@ public class CalendarQuickstart {
                 }
                 System.out.printf("%s (%s)\n", event.getSummary(), start);
             }
-            return createEvent(service, mail, startDate, endDate, meeting);
+            return createEvent(service, mail, startDate, endDate, meeting, urlFront);
         }
     }
 
@@ -141,12 +141,13 @@ public class CalendarQuickstart {
      * @return
      * @throws IOException
      */
-    public  Event createEvent(Calendar service, String mail, String startDate, String endDate, TMeetingScheduleCenter meeting) throws IOException {
+    public Event createEvent(Calendar service, String mail, String startDate, String endDate, TMeetingScheduleCenter meeting, String urlFront) throws IOException {
 
         Event event = new Event()
                 .setSummary(meeting.getIdEvaluationCenter().getEvaluationCenter())
                 .setLocation(meeting.getIdEvaluationCenter().getGoogleMapsLocation())
-                .setDescription("Si deceas Cancelar haz click aquí.");
+                .setDescription("Si deceas Cancelar haz click aquí. " + urlFront + "verCita?citaId=" + meeting.getTMeetings().getUuid() + "\n" +
+                        "Si deceas ver recibo haz click aquí." + urlFront + "verCita?citaId=" + meeting.getTMeetings().getUuid());
 
         DateTime startDateTime = new DateTime(startDate);
         EventDateTime start = new EventDateTime()
@@ -183,7 +184,7 @@ public class CalendarQuickstart {
         return event;
     }
 
-    public  void delete(String idEvent) throws IOException, GeneralSecurityException {
+    public void delete(String idEvent) throws IOException, GeneralSecurityException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         Calendar service = new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
                 .setApplicationName(APPLICATION_NAME)
