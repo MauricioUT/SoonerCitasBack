@@ -147,7 +147,7 @@ public class CalendarQuickstart {
                 .setSummary(meeting.getIdEvaluationCenter().getEvaluationCenter())
                 .setLocation(meeting.getIdEvaluationCenter().getGoogleMapsLocation())
                 .setDescription("Si deceas Cancelar haz click aquí. " + urlFront + "verCita?citaId=" + meeting.getTMeetings().getUuid() + "\n" +
-                        "Si deceas ver recibo haz click aquí." + urlFront + "verCita?citaId=" + meeting.getTMeetings().getUuid());
+                        "Si deceas ver recibo haz click aquí." + urlFront + "cancelar?citaId=" + meeting.getTMeetings().getUuid());
 
         DateTime startDateTime = new DateTime(startDate);
         EventDateTime start = new EventDateTime()
