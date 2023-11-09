@@ -180,7 +180,7 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public ResponseEntity<?> updateMeetingStatus(UpdateStatusMeetingDto updateStatusMeetingDto) {
         Optional<CMeetingStatus> status;
-        Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(updateStatusMeetingDto.getId());
+        Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(updateStatusMeetingDto.getUuid());
 
         if (updateStatusMeetingDto.isStatus())
             status = cMeetingStatusRepositoryWrapper.findById(MEETING_ATTENDED);
@@ -188,7 +188,7 @@ public class MeetingServiceImpl implements MeetingService {
             status = cMeetingStatusRepositoryWrapper.findById(MEETING_DELETED);
 
         if (meeting.isEmpty() || status.isEmpty())
-            throw new ResourceNotFoundException("Reunion", "id", updateStatusMeetingDto.getId(), new Throwable("getMeeting(Long id)"), this.getClass().getName());
+            throw new ResourceNotFoundException("Reunion", "id", updateStatusMeetingDto.getUuid(), new Throwable("getMeeting(Long id)"), this.getClass().getName());
 
         meeting.get().getTMeetingScheduleCenter().setIdMeetingStatus(status.get());
         meeting.get().getTObservationsMeeting().setObservation(updateStatusMeetingDto.getObservations());
@@ -202,6 +202,6 @@ public class MeetingServiceImpl implements MeetingService {
             throw new ExceptionGeneric("Error al cancelar el evento", new Throwable("updateMeetingStatus()"), this.getClass().getName());
         }
 
-        return new ResponseEntity<>(updateStatusMeetingDto.getId(), HttpStatus.OK);
+        return new ResponseEntity<>(updateStatusMeetingDto.getUuid(), HttpStatus.OK);
     }
 }
