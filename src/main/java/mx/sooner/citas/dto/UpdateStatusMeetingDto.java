@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.UUID;
 
 @Setter
 @Getter
@@ -16,7 +15,7 @@ public class UpdateStatusMeetingDto implements Serializable {
 
     private static final long serialVersionUID = 810685864285664513L;
 
-    private String id;
+    private String uuid;
     private String observations;
     private boolean status;
 }
