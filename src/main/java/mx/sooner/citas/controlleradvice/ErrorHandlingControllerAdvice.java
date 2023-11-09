@@ -2,6 +2,7 @@ package mx.sooner.citas.controlleradvice;
 
 
 import lombok.extern.slf4j.Slf4j;
+import mx.sooner.citas.dto.DefaultMessage;
 import mx.sooner.citas.exception.ExceptionGeneric;
 import mx.sooner.citas.exception.ResourceNotFoundException;
 import org.springframework.core.Ordered;

@@ -1,6 +1,7 @@
 package mx.sooner.citas.serviceImpl;
 
 import com.google.api.services.calendar.model.Event;
+import mx.sooner.citas.dto.DefaultMessage;
 import mx.sooner.citas.dto.MeetingRequestDto;
 import mx.sooner.citas.dto.TMeetingDto;
 import mx.sooner.citas.dto.UpdateStatusMeetingDto;
@@ -129,7 +130,9 @@ public class MeetingServiceImpl implements MeetingService {
         } catch (SQLException | IOException | GeneralSecurityException e) {
             throw new ExceptionGeneric("Error al agendar cita en calendario", new Throwable("addMeeting()"), this.getClass().getName());
         }
-        return new ResponseEntity<>(meeting.getUuid(), HttpStatus.OK);
+        DefaultMessage defaultMessage = new DefaultMessage();
+        defaultMessage.setDefaultMessage(meeting.getUuid());
+        return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
     }
 
     public List<String> getScheduleCalendar(CAttentionSchedule schedule, LocalDate date) {
