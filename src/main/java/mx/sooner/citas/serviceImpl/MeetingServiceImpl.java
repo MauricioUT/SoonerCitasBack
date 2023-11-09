@@ -204,7 +204,8 @@ public class MeetingServiceImpl implements MeetingService {
         } catch (IOException | GeneralSecurityException e) {
             throw new ExceptionGeneric("Error al cancelar el evento", new Throwable("updateMeetingStatus()"), this.getClass().getName());
         }
-
-        return new ResponseEntity<>(updateStatusMeetingDto.getUuid(), HttpStatus.OK);
+        DefaultMessage defaultMessage = new DefaultMessage();
+        defaultMessage.setDefaultMessage(updateStatusMeetingDto.getUuid());
+        return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
     }
 }
