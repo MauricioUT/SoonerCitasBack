@@ -1,7 +1,8 @@
 FROM  openjdk:15
-EXPOSE 8080
+CMD ["./gradlew", "clean", "bootJar"]
 RUN mkdir -p /app/
 ADD /build/libs/sooner.jar /app/sooner.jar
 RUN mkdir -p /tokens/
 ADD /tokens/StoredCredential /tokens/StoredCredential
+EXPOSE 8080
 ENTRYPOINT ["java", "-jar", "/app/sooner.jar"]
