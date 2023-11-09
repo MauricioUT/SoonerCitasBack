@@ -24,8 +24,8 @@ public class MeetingController {
     }
 
     @GetMapping(value = "/getMeeting", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getMeet(@RequestParam String id) {
-        return meetingService.getMeeting(id);
+    public ResponseEntity<?> getMeet(@RequestParam String uuid) {
+        return meetingService.getMeeting(uuid);
     }
 
     @GetMapping(value = "/getMeetings", produces = MediaType.APPLICATION_JSON_VALUE)
