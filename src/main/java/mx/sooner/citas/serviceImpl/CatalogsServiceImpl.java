@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -78,11 +79,14 @@ public class CatalogsServiceImpl implements CatalogsService {
     public ResponseEntity<?> findScheduleByDate(Integer idCentroEval, String date) {
         LocalDate localDate = LocalDate.parse(date);
         Optional<CEvaluationCenter> evaluationCenter = cEvaluationCenterRepositoryWrapper.findById(idCentroEval);
-
+        List<CAttentionSchedule> cAttentionSchedules;
         if (evaluationCenter.isEmpty())
             throw new ResourceNotFoundException("Centro Evaluacion", " ", " ", new Throwable("getCeEvaluationCenter()"), this.getClass().getName());
 
-        List<CAttentionSchedule> cAttentionSchedules = cAttentionScheduleRepository.findScheduleByDate(localDate, idCentroEval, Long.valueOf(evaluationCenter.get().getNoMaxMeetings()));
+        if (!localDate.getDayOfWeek().equals(DayOfWeek.SATURDAY))
+            cAttentionSchedules = cAttentionScheduleRepository.findScheduleByDate(localDate, idCentroEval, Long.valueOf(evaluationCenter.get().getNoMaxMeetings()));
+        else
+            cAttentionSchedules = cAttentionScheduleRepository.findScheduleByDateWeekly(localDate, idCentroEval, Long.valueOf(evaluationCenter.get().getNoMaxMeetings()));
 
         if (cAttentionSchedules.isEmpty())
             return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);

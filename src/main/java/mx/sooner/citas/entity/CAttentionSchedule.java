@@ -5,12 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +19,7 @@ import javax.validation.constraints.Size;
 @Table(name = "c_attention_schedules")
 public class CAttentionSchedule {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Integer id;
 
@@ -36,7 +36,13 @@ public class CAttentionSchedule {
     @Column(name = "weekly_schedule", nullable = false)
     private Boolean weeklySchedule = false;
 
-    /*@OneToMany(mappedBy = "idSchedule")
-    private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();*/
+    @ManyToMany
+    @JoinTable(name = "t_attention_schedules_evaluation_centers",
+            joinColumns = @JoinColumn(name = "id_schedule"),
+            inverseJoinColumns = @JoinColumn(name = "id_evaluation_Center"))
+    private Set<CEvaluationCenter> cEvaluationCenters = new LinkedHashSet<>();
+
+    @OneToMany(mappedBy = "idSchedule")
+    private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
 
 }

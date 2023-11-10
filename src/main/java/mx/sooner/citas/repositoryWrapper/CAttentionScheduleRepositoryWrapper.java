@@ -19,6 +19,10 @@ public class CAttentionScheduleRepositoryWrapper {
         return cAttentionScheduleRepository.findScheduleByDate(date, idEvaluationCenter, noEvalCent);
     }
 
+    public List<CAttentionSchedule> findScheduleByDateWeekly(LocalDate date, Integer idEvaluationCenter, Long noEvalCent) {
+        return cAttentionScheduleRepository.findScheduleByDateWeekly(date, idEvaluationCenter, noEvalCent);
+    }
+
     public Optional<CAttentionSchedule> findById(int id) {
         return cAttentionScheduleRepository.findById(id);
     }

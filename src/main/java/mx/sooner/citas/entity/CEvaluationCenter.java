@@ -42,6 +42,9 @@ public class CEvaluationCenter {
     @Column(name = "google_maps_location", nullable = false, length = 100)
     private String googleMapsLocation;
 
+    @ManyToMany(mappedBy = "cEvaluationCenters")
+    private Set<CAttentionSchedule> cAttentionSchedules = new LinkedHashSet<>();
+
     @OneToMany(mappedBy = "idEvaluationCenter")
     private Set<TMeetingScheduleCenter> tMeetingScheduleCenters = new LinkedHashSet<>();
 
