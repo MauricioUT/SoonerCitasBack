@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
@@ -30,7 +31,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-@Transactional
 public class MeetingServiceImpl implements MeetingService {
 
     private final static String DATE_PATTERN = "yyyy-MM-dd'T'HH:mm:ssz";
@@ -79,6 +79,7 @@ public class MeetingServiceImpl implements MeetingService {
     private CalendarQuickstart calendarQuickstart;
 
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<?> addMeeting(MeetingRequestDto meetingDto) {
         Optional<CEvaluationCenter> ec = this.cEvaluationCenterRepositoryWrapper.findById(meetingDto.getIdEvaluationCenter());
         Optional<CGender> ge = this.cGenderRepositoryWrapper.findById(meetingDto.getIdGender());
@@ -181,6 +182,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @return
      */
     @Override
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<?> updateMeetingStatus(UpdateStatusMeetingDto updateStatusMeetingDto) {
         Optional<CMeetingStatus> status;
         Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(updateStatusMeetingDto.getUuid());

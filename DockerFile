@@ -1,5 +1,4 @@
 FROM  openjdk:15
-CMD ["./gradlew", "clean", "bootJar"]
 RUN mkdir -p /app/
 ADD /build/libs/sooner.jar /app/sooner.jar
 RUN mkdir -p /tokens/
