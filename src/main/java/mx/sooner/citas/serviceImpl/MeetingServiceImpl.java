@@ -182,7 +182,7 @@ public class MeetingServiceImpl implements MeetingService {
      * @return
      */
     @Override
-    @Transactional(isolation = Isolation.SERIALIZABLE)
+    @Transactional()
     public ResponseEntity<?> updateMeetingStatus(UpdateStatusMeetingDto updateStatusMeetingDto) {
         Optional<CMeetingStatus> status;
         Optional<TMeeting> meeting = tMeetingRepositoryWrapper.findById(updateStatusMeetingDto.getUuid());
