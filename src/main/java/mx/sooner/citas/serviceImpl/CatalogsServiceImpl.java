@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -89,7 +90,8 @@ public class CatalogsServiceImpl implements CatalogsService {
             cAttentionSchedules = cAttentionScheduleRepository.findScheduleByDateWeekly(localDate, idCentroEval, Long.valueOf(evaluationCenter.get().getNoMaxMeetings()));
 
         if (cAttentionSchedules.isEmpty())
-            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+           // return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
         List<CatalogDto> catalog = cAttentionSchedules.stream().map(ca -> {
             CatalogDto cat = new CatalogDto();
             cat.setId(ca.getId());
