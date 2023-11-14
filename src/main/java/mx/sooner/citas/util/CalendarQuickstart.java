@@ -179,7 +179,7 @@ public class CalendarQuickstart {
         event.setReminders(reminders);
 
         String calendarId = "primary";
-        event = service.events().insert(calendarId, event).execute();
+        event = service.events().insert(calendarId, event).setSendNotifications(true).setSendUpdates("all").execute();
         System.out.printf("Event created: %s\n", event.getHtmlLink());
         return event;
     }

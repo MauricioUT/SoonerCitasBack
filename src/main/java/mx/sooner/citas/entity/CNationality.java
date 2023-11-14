@@ -29,7 +29,7 @@ public class CNationality implements Serializable {
 
     @Size(max = 45)
     @NotNull
-    @Column(name = "nationality", nullable = false, length = 45)
+    @Column(name = "nationality", nullable = false, length = 80)
     private String nationality;
 
     @OneToMany(mappedBy = "idNationality")

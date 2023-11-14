@@ -83,11 +83,13 @@ public class TMeeting {
     private String street;
 
     @NotNull
-    @Column(name = "no_ext", nullable = false)
-    private Integer noExt;
+    @Size(max = 10)
+    @Column(name = "no_ext", nullable = false, length = 20)
+    private String noExt;
 
-    @Column(name = "no_int")
-    private Integer noInt;
+    @Size(max = 10)
+    @Column(name = "no_int", length = 20)
+    private String noInt;
 
     @Column(name = "registration_date")
     private Instant registrationDate;

@@ -50,9 +50,9 @@ public class MeetingRequestDto implements Serializable {
 
     private String street;
 
-    private int noExt;
+    private String noExt;
 
-    private int noInt;
+    private String noInt;
 
     private int idEducation;
 

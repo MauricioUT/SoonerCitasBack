@@ -53,8 +53,8 @@ public class TMeetingDto implements Serializable {
     @Size(max = 100)
     private String street;
     @NotNull
-    private Integer noExt;
-    private Integer noInt;
+    private String noExt;
+    private String noInt;
     private Instant registrationDate;
     @Size(max = 100)
     private String idMeetingGoogle;
