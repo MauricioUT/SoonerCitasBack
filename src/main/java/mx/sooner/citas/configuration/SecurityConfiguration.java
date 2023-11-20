@@ -22,6 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         allowDomains.add("http://localhost:8080");
         allowDomains.add("https://stellar-psyche-312620.uc.r.appspot.com");
         allowDomains.add("https://soonercitasback.uc.r.appspot.com");
+        allowDomains.add("https://citas-arranca-patio.uc.r.appspot.com");
         
 
         CorsConfiguration configuration = new CorsConfiguration();
