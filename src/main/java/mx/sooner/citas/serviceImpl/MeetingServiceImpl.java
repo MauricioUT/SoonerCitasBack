@@ -179,13 +179,13 @@ public class MeetingServiceImpl implements MeetingService {
                 meetings = tMeetingRepositoryWrapper.findByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(), pageable);
                 size = tMeetingRepositoryWrapper.countByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter());
             } else if (meetingsFilteredDto.getIdEvaluationCenter() == 0) {
-                meetings = tMeetingRepositoryWrapper.findByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard(), pageable);
-                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard());
+                meetings = tMeetingRepositoryWrapper.findByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard().toUpperCase(), pageable);
+                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard().toUpperCase());
             } else {
                 meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCardPaged(meetingsFilteredDto.getIdEvaluationCenter(),
-                        meetingsFilteredDto.getWildCard(), pageable);
+                        meetingsFilteredDto.getWildCard().toUpperCase(), pageable);
                 size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhoneAndIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(),
-                        meetingsFilteredDto.getWildCard());
+                        meetingsFilteredDto.getWildCard().toUpperCase());
             }
         } else {
             if (meetingsFilteredDto.getWildCard().isEmpty() && meetingsFilteredDto.getIdEvaluationCenter() == 0) {
@@ -195,13 +195,13 @@ public class MeetingServiceImpl implements MeetingService {
                 meetings = tMeetingRepositoryWrapper.findByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(), sort);
                 size = tMeetingRepositoryWrapper.countByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter());
             } else if (meetingsFilteredDto.getIdEvaluationCenter() == 0) {
-                meetings = tMeetingRepositoryWrapper.findByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard(), sort);
-                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard());
+                meetings = tMeetingRepositoryWrapper.findByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard().toUpperCase(), sort);
+                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard().toUpperCase());
             } else {
                 meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCard(meetingsFilteredDto.getIdEvaluationCenter(),
-                        meetingsFilteredDto.getWildCard(), sort);
+                        meetingsFilteredDto.getWildCard().toUpperCase(), sort);
                 size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhoneAndIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(),
-                        meetingsFilteredDto.getWildCard());
+                        meetingsFilteredDto.getWildCard().toUpperCase());
             }
         }
 
