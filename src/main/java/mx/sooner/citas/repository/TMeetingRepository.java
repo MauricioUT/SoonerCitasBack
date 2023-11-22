@@ -15,15 +15,15 @@ public interface TMeetingRepository extends JpaRepository<TMeeting, Long> {
     Optional<TMeeting> findByUuid(String uuid);
 
     @Query("select t from TMeeting t " +
-            "where (UPPER(t.curp) = ?1 or UPPER(t.mail) = ?2 or t.phone = ?3 or UPPER(t.name) = ?5) and t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
+            "where (UPPER(t.curp) like concat('%', :curp,'%') or UPPER(t.mail) like concat('%', :mail,'%') or t.phone like concat('%', :phone,'%') or UPPER(t.name) like concat('%', :nombre,'%')) and t.tMeetingScheduleCenter.idEvaluationCenter.id = :id")
     List<TMeeting> findByCurpOrMailOrPhoneAndIdEvaluationCenter(String curp, String mail, String phone, Integer id, String nombre, Pageable pageable);
 
     @Query("select t from TMeeting t " +
-            "where (UPPER(t.curp) = ?1 or UPPER(t.mail) = ?2 or t.phone = ?3 or UPPER(t.name) = ?5) and t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
+            "where (UPPER(t.curp) like concat('%', :curp,'%') or UPPER(t.mail) like concat('%', :mail,'%') or t.phone like concat('%', :phone,'%') or UPPER(t.name) like concat('%', :nombre,'%')) and t.tMeetingScheduleCenter.idEvaluationCenter.id = :id")
     List<TMeeting> findByCurpOrMailOrPhoneAndIdEvaluationCenter(String curp, String mail, String phone, Integer id, String nombre, Sort sort);
 
     @Query("select count(t.id) from TMeeting t " +
-            "where (UPPER(t.curp) = ?1 or UPPER(t.mail) = ?2 or t.phone = ?3 or UPPER(t.name) = ?5) and t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
+            "where (UPPER(t.curp) like concat('%', :curp,'%') or UPPER(t.mail) like concat('%', :mail,'%') or t.phone like concat('%', :phone,'%') or UPPER(t.name) like concat('%', :nombre,'%')) and t.tMeetingScheduleCenter.idEvaluationCenter.id = :id")
     long countByCurpOrMailOrPhoneAndIdEvaluationCenter(String curp, String mail, String phone, Integer id, String nombre);
 
     @Query("select t from TMeeting t " +
@@ -40,15 +40,15 @@ public interface TMeetingRepository extends JpaRepository<TMeeting, Long> {
 
 
     @Query("select t from TMeeting t " +
-            "where UPPER(t.curp) = ?1 or UPPER(t.mail) = ?2 or t.phone = ?3 or UPPER(t.name) = ?4")
+            "where UPPER(t.curp) like concat('%', :curp,'%') or UPPER(t.mail) like concat('%', :mail,'%') or t.phone like concat('%', :phone,'%') or UPPER(t.name) like concat('%', :nombre,'%')")
     List<TMeeting> findByCurpOrMailOrPhone(String curp, String mail, String phone, String nombre, Pageable pageable);
 
     @Query("select t from TMeeting t " +
-            "where UPPER(t.curp) = ?1 or UPPER(t.mail) = ?2 or t.phone = ?3 or UPPER(t.name) = ?4")
+            "where UPPER(t.curp) like concat('%', :curp,'%') or UPPER(t.mail) like concat('%', :mail,'%') or t.phone like concat('%', :phone,'%') or UPPER(t.name) like concat('%', :nombre,'%')")
     List<TMeeting> findByCurpOrMailOrPhone(String curp, String mail, String phone, String nombre, Sort sort);
 
     @Query("select count(t.id) from TMeeting t " +
-            "where UPPER(t.curp) = ?1 or UPPER(t.mail) = ?2 or t.phone = ?3 or UPPER(t.name) = ?4")
+            "where UPPER(t.curp) like concat('%', :curp,'%') or UPPER(t.mail) like concat('%', :mail,'%') or t.phone like concat('%', :phone,'%') or UPPER(t.name) like concat('%', :nombre,'%')")
     long countByCurpOrMailOrPhone(String curp, String mail, String phone, String nombre);
 
     @Query("select count(t.id) from TMeeting t")
