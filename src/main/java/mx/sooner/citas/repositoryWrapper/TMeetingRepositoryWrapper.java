@@ -3,11 +3,12 @@ package mx.sooner.citas.repositoryWrapper;
 import mx.sooner.citas.entity.TMeeting;
 import mx.sooner.citas.repository.TMeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class TMeetingRepositoryWrapper {
@@ -21,6 +22,14 @@ public class TMeetingRepositoryWrapper {
 
     public Optional<TMeeting> findById(String id) {
         return tMeetingRepository.findByUuid(id);
+    }
+
+    public List<TMeeting> findAllByEvaluationCenterAndWildCardPaged(Integer idEvaluation, String wildCard, Pageable pageable) {
+        return tMeetingRepository.findByCurpOrMailOrPhoneOrTMeetingScheduleCenter_IdEvaluationCenter_Id(wildCard, wildCard, wildCard, idEvaluation, pageable);
+    }
+
+    public List<TMeeting> findAllByEvaluationCenterAndWildCard(Integer idEvaluation, String wildCard, Sort sort) {
+        return tMeetingRepository.findByCurpOrMailOrPhoneOrTMeetingScheduleCenter_IdEvaluationCenter_Id(wildCard, wildCard, wildCard, idEvaluation, sort);
     }
 
     public Long save(TMeeting meet) {

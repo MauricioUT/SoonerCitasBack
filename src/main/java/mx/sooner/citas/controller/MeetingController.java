@@ -1,6 +1,7 @@
 package mx.sooner.citas.controller;
 
 import mx.sooner.citas.dto.MeetingRequestDto;
+import mx.sooner.citas.dto.MeetingsFilteredDto;
 import mx.sooner.citas.dto.UpdateStatusMeetingDto;
 import mx.sooner.citas.service.MeetingService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/meeting")
@@ -28,9 +28,9 @@ public class MeetingController {
         return meetingService.getMeeting(uuid);
     }
 
-    @GetMapping(value = "/getMeetings", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> getMeetings() {
-        return meetingService.getMeetings();
+    @PostMapping(value = "/getMeetings", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> getMeetings(@RequestBody MeetingsFilteredDto meetingsFilteredDto) {
+        return meetingService.getMeetings(meetingsFilteredDto);
     }
 
     @PutMapping(value = "/update", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)

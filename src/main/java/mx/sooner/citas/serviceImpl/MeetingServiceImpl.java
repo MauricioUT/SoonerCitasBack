@@ -1,10 +1,7 @@
 package mx.sooner.citas.serviceImpl;
 
 import com.google.api.services.calendar.model.Event;
-import mx.sooner.citas.dto.DefaultMessage;
-import mx.sooner.citas.dto.MeetingRequestDto;
-import mx.sooner.citas.dto.TMeetingDto;
-import mx.sooner.citas.dto.UpdateStatusMeetingDto;
+import mx.sooner.citas.dto.*;
 import mx.sooner.citas.entity.*;
 import mx.sooner.citas.exception.ExceptionGeneric;
 import mx.sooner.citas.exception.ResourceNotFoundException;
@@ -14,6 +11,9 @@ import mx.sooner.citas.util.CalendarQuickstart;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -164,8 +164,16 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public ResponseEntity<?> getMeetings() {
-        List<TMeeting> meetings = tMeetingRepositoryWrapper.findAll();
+    public ResponseEntity<?> getMeetings(MeetingsFilteredDto meetingsFilteredDto) {
+        List<TMeeting> meetings;
+        if (meetingsFilteredDto.getHasPagination()) {
+            Pageable pageable = PageRequest.of(meetingsFilteredDto.getPage(), meetingsFilteredDto.getTotalPage(), Sort.by("tMeetingScheduleCenter.meetingDate").descending());
+            meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCardPaged(meetingsFilteredDto.getIdEvaluationCenter(),
+                    meetingsFilteredDto.getWildCard(), pageable);
+        } else {
+            meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCard(meetingsFilteredDto.getIdEvaluationCenter(),
+                    meetingsFilteredDto.getWildCard(), Sort.by("tMeetingScheduleCenter.meetingDate").descending());
+        }
 
         if (meetings.isEmpty())
             return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
