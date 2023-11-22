@@ -34,11 +34,11 @@ public class TMeetingRepositoryWrapper {
     }
 
     public List<TMeeting> findAllByEvaluationCenterAndWildCardPaged(Integer idEvaluation, String wildCard, Pageable pageable) {
-        return tMeetingRepository.findByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, pageable);
+        return tMeetingRepository.findByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, wildCard, pageable);
     }
 
     public List<TMeeting> findAllByEvaluationCenterAndWildCard(Integer idEvaluation, String wildCard, Sort sort) {
-        return tMeetingRepository.findByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, sort);
+        return tMeetingRepository.findByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, wildCard, sort);
     }
 
     public List<TMeeting> findByIdEvaluationCenter(Integer idEvaluation, Pageable pageable) {
@@ -50,7 +50,7 @@ public class TMeetingRepositoryWrapper {
     }
 
     public long countByCurpOrMailOrPhoneAndIdEvaluationCenter(Integer idEvaluation, String wildCard) {
-        return tMeetingRepository.countByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation);
+        return tMeetingRepository.countByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, wildCard);
     }
 
     public long countByIdEvaluationCenter(Integer idEvaluation) {
@@ -58,15 +58,15 @@ public class TMeetingRepositoryWrapper {
     }
 
     public List<TMeeting> findByCurpOrMailOrPhone(String wildCard, Pageable pageable) {
-        return tMeetingRepository.findByCurpOrMailOrPhone(wildCard, wildCard, wildCard, pageable);
+        return tMeetingRepository.findByCurpOrMailOrPhone(wildCard, wildCard, wildCard, wildCard, pageable);
     }
 
     public List<TMeeting> findByCurpOrMailOrPhone(String wildCard, Sort sort) {
-        return tMeetingRepository.findByCurpOrMailOrPhone(wildCard, wildCard, wildCard, sort);
+        return tMeetingRepository.findByCurpOrMailOrPhone(wildCard, wildCard, wildCard, wildCard, sort);
     }
 
     public long countByCurpOrMailOrPhone(String wildCard) {
-        return tMeetingRepository.countByCurpOrMailOrPhone(wildCard, wildCard, wildCard);
+        return tMeetingRepository.countByCurpOrMailOrPhone(wildCard, wildCard, wildCard, wildCard);
     }
 
     public Long save(TMeeting meet) {
