@@ -3,6 +3,7 @@ package mx.sooner.citas.repositoryWrapper;
 import mx.sooner.citas.entity.TMeeting;
 import mx.sooner.citas.repository.TMeetingRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,16 @@ public class TMeetingRepositoryWrapper {
     @Autowired
     private TMeetingRepository tMeetingRepository;
 
-    public List<TMeeting> findAll() {
-        return tMeetingRepository.findAll();
+    public Page<TMeeting> findAll(Pageable pageable) {
+        return tMeetingRepository.findAll(pageable);
+    }
+
+    public List<TMeeting> findAll(Sort sort) {
+        return tMeetingRepository.findAll(sort);
+    }
+
+    public long conutAll() {
+        return tMeetingRepository.countAll();
     }
 
     public Optional<TMeeting> findById(String id) {
@@ -25,11 +34,39 @@ public class TMeetingRepositoryWrapper {
     }
 
     public List<TMeeting> findAllByEvaluationCenterAndWildCardPaged(Integer idEvaluation, String wildCard, Pageable pageable) {
-        return tMeetingRepository.findByCurpOrMailOrPhoneOrTMeetingScheduleCenter_IdEvaluationCenter_Id(wildCard, wildCard, wildCard, idEvaluation, pageable);
+        return tMeetingRepository.findByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, pageable);
     }
 
     public List<TMeeting> findAllByEvaluationCenterAndWildCard(Integer idEvaluation, String wildCard, Sort sort) {
-        return tMeetingRepository.findByCurpOrMailOrPhoneOrTMeetingScheduleCenter_IdEvaluationCenter_Id(wildCard, wildCard, wildCard, idEvaluation, sort);
+        return tMeetingRepository.findByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation, sort);
+    }
+
+    public List<TMeeting> findByIdEvaluationCenter(Integer idEvaluation, Pageable pageable) {
+        return tMeetingRepository.findByIdEvaluationCenter(idEvaluation, pageable);
+    }
+
+    public List<TMeeting> findByIdEvaluationCenter(Integer idEvaluation, Sort sort) {
+        return tMeetingRepository.findByIdEvaluationCenter(idEvaluation, sort);
+    }
+
+    public long countByCurpOrMailOrPhoneAndIdEvaluationCenter(Integer idEvaluation, String wildCard) {
+        return tMeetingRepository.countByCurpOrMailOrPhoneAndIdEvaluationCenter(wildCard, wildCard, wildCard, idEvaluation);
+    }
+
+    public long countByIdEvaluationCenter(Integer idEvaluation) {
+        return tMeetingRepository.countByIdEvaluationCenter(idEvaluation);
+    }
+
+    public List<TMeeting> findByCurpOrMailOrPhone(String wildCard, Pageable pageable) {
+        return tMeetingRepository.findByCurpOrMailOrPhone(wildCard, wildCard, wildCard, pageable);
+    }
+
+    public List<TMeeting> findByCurpOrMailOrPhone(String wildCard, Sort sort) {
+        return tMeetingRepository.findByCurpOrMailOrPhone(wildCard, wildCard, wildCard, sort);
+    }
+
+    public long countByCurpOrMailOrPhone(String wildCard) {
+        return tMeetingRepository.countByCurpOrMailOrPhone(wildCard, wildCard, wildCard);
     }
 
     public Long save(TMeeting meet) {

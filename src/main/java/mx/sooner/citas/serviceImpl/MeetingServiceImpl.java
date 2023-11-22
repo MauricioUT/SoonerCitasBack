@@ -11,6 +11,7 @@ import mx.sooner.citas.util.CalendarQuickstart;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -166,21 +167,50 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     public ResponseEntity<?> getMeetings(MeetingsFilteredDto meetingsFilteredDto) {
         List<TMeeting> meetings;
+        Sort sort = Sort.by("tMeetingScheduleCenter.meetingDate").descending();
+        long size;
         if (meetingsFilteredDto.getHasPagination()) {
-            Pageable pageable = PageRequest.of(meetingsFilteredDto.getPage(), meetingsFilteredDto.getTotalPage(), Sort.by("tMeetingScheduleCenter.meetingDate").descending());
-            meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCardPaged(meetingsFilteredDto.getIdEvaluationCenter(),
-                    meetingsFilteredDto.getWildCard(), pageable);
+            Pageable pageable = PageRequest.of(meetingsFilteredDto.getPage(), meetingsFilteredDto.getTotalPage(), sort);
+            if (meetingsFilteredDto.getWildCard().isEmpty() && meetingsFilteredDto.getIdEvaluationCenter() == 0) {
+                Page<TMeeting> page = tMeetingRepositoryWrapper.findAll(pageable);
+                meetings = page.getContent();
+                size = tMeetingRepositoryWrapper.conutAll();
+            } else if (meetingsFilteredDto.getWildCard().isEmpty()) {
+                meetings = tMeetingRepositoryWrapper.findByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(), pageable);
+                size = tMeetingRepositoryWrapper.countByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter());
+            } else if (meetingsFilteredDto.getIdEvaluationCenter() == 0) {
+                meetings = tMeetingRepositoryWrapper.findByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard(), pageable);
+                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard());
+            } else {
+                meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCardPaged(meetingsFilteredDto.getIdEvaluationCenter(),
+                        meetingsFilteredDto.getWildCard(), pageable);
+                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhoneAndIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(),
+                        meetingsFilteredDto.getWildCard());
+            }
         } else {
-            meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCard(meetingsFilteredDto.getIdEvaluationCenter(),
-                    meetingsFilteredDto.getWildCard(), Sort.by("tMeetingScheduleCenter.meetingDate").descending());
+            if (meetingsFilteredDto.getWildCard().isEmpty() && meetingsFilteredDto.getIdEvaluationCenter() == 0) {
+                meetings = tMeetingRepositoryWrapper.findAll(sort);
+                size = tMeetingRepositoryWrapper.conutAll();
+            } else if (meetingsFilteredDto.getWildCard().isEmpty()) {
+                meetings = tMeetingRepositoryWrapper.findByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(), sort);
+                size = tMeetingRepositoryWrapper.countByIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter());
+            } else if (meetingsFilteredDto.getIdEvaluationCenter() == 0) {
+                meetings = tMeetingRepositoryWrapper.findByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard(), sort);
+                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhone(meetingsFilteredDto.getWildCard());
+            } else {
+                meetings = tMeetingRepositoryWrapper.findAllByEvaluationCenterAndWildCard(meetingsFilteredDto.getIdEvaluationCenter(),
+                        meetingsFilteredDto.getWildCard(), sort);
+                size = tMeetingRepositoryWrapper.countByCurpOrMailOrPhoneAndIdEvaluationCenter(meetingsFilteredDto.getIdEvaluationCenter(),
+                        meetingsFilteredDto.getWildCard());
+            }
         }
 
-        if (meetings.isEmpty())
-            return new ResponseEntity<>(new ArrayList<>(), HttpStatus.OK);
+        if (meetings.isEmpty() || size == 0)
+            return new ResponseEntity<>(new MeetingsResponseDto(0L, new ArrayList<>()), HttpStatus.OK);
         List<TMeetingDto> meetingsDto = modelMapper.map(meetings, new TypeToken<List<TMeetingDto>>() {
         }.getType());
 
-        return new ResponseEntity<>(meetingsDto, HttpStatus.OK);
+        return new ResponseEntity<>(new MeetingsResponseDto(size, meetingsDto), HttpStatus.OK);
     }
 
     /**

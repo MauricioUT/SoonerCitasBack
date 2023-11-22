@@ -15,12 +15,44 @@ public interface TMeetingRepository extends JpaRepository<TMeeting, Long> {
     Optional<TMeeting> findByUuid(String uuid);
 
     @Query("select t from TMeeting t " +
-         "where t.curp = ?1 or t.mail = ?2 or t.phone = ?3 or t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
-    List<TMeeting> findByCurpOrMailOrPhoneOrTMeetingScheduleCenter_IdEvaluationCenter_Id(String curp, String mail, String phone, Integer id, Pageable pageable);
+            "where (t.curp = ?1 or t.mail = ?2 or t.phone = ?3) and t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
+    List<TMeeting> findByCurpOrMailOrPhoneAndIdEvaluationCenter(String curp, String mail, String phone, Integer id, Pageable pageable);
 
     @Query("select t from TMeeting t " +
-            "where t.curp = ?1 or t.mail = ?2 or t.phone = ?3 or t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
-    List<TMeeting> findByCurpOrMailOrPhoneOrTMeetingScheduleCenter_IdEvaluationCenter_Id(String curp, String mail, String phone, Integer id, Sort sort);
+            "where (t.curp = ?1 or t.mail = ?2 or t.phone = ?3) and t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
+    List<TMeeting> findByCurpOrMailOrPhoneAndIdEvaluationCenter(String curp, String mail, String phone, Integer id, Sort sort);
+
+    @Query("select count(t.id) from TMeeting t " +
+            "where (t.curp = ?1 or t.mail = ?2 or t.phone = ?3) and t.tMeetingScheduleCenter.idEvaluationCenter.id = ?4")
+    long countByCurpOrMailOrPhoneAndIdEvaluationCenter(String curp, String mail, String phone, Integer id);
+
+    @Query("select t from TMeeting t " +
+            "where t.tMeetingScheduleCenter.idEvaluationCenter.id = ?1")
+    List<TMeeting> findByIdEvaluationCenter(Integer id, Pageable pageable);
+
+    @Query("select t from TMeeting t " +
+            "where t.tMeetingScheduleCenter.idEvaluationCenter.id = ?1")
+    List<TMeeting> findByIdEvaluationCenter(Integer id, Sort sort);
+
+    @Query("select count(t.id) from TMeeting t " +
+            "where t.tMeetingScheduleCenter.idEvaluationCenter.id = ?1")
+    long countByIdEvaluationCenter(Integer id);
+
+
+    @Query("select t from TMeeting t " +
+            "where t.curp = ?1 or t.mail = ?2 or t.phone = ?3")
+    List<TMeeting> findByCurpOrMailOrPhone(String curp, String mail, String phone, Pageable pageable);
+
+    @Query("select t from TMeeting t " +
+            "where t.curp = ?1 or t.mail = ?2 or t.phone = ?3")
+    List<TMeeting> findByCurpOrMailOrPhone(String curp, String mail, String phone, Sort sort);
+
+    @Query("select count(t.id) from TMeeting t " +
+            "where t.curp = ?1 or t.mail = ?2 or t.phone = ?3")
+    long countByCurpOrMailOrPhone(String curp, String mail, String phone);
+
+    @Query("select count(t.id) from TMeeting t")
+    long countAll();
 
 
 }
