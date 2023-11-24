@@ -82,6 +82,12 @@ public class MeetingServiceImpl implements MeetingService {
     @Override
     @Transactional(isolation = Isolation.SERIALIZABLE)
     public ResponseEntity<?> addMeeting(MeetingRequestDto meetingDto) {
+        DefaultMessage defaultMessage = new DefaultMessage();
+        boolean existeCurp = this.tMeetingRepositoryWrapper.existsByCurpAndTMeetingScheduleCenter_IdMeetingStatus_IdIn(meetingDto.getCurp(), List.of(MEETING_CREATED));
+        if (existeCurp) {
+            defaultMessage.setDefaultMessage("ya existe una curp con estatus Registrado");
+            return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
+        }
         Optional<CEvaluationCenter> ec = this.cEvaluationCenterRepositoryWrapper.findById(meetingDto.getIdEvaluationCenter());
         Optional<CGender> ge = this.cGenderRepositoryWrapper.findById(meetingDto.getIdGender());
         Optional<CNationality> na = this.cNationalityRepositoryWrapper.findById(meetingDto.getIdNationality());
@@ -132,7 +138,6 @@ public class MeetingServiceImpl implements MeetingService {
         } catch (SQLException | IOException | GeneralSecurityException e) {
             throw new ExceptionGeneric("Error al agendar cita en calendario", new Throwable("addMeeting()"), this.getClass().getName());
         }
-        DefaultMessage defaultMessage = new DefaultMessage();
         defaultMessage.setDefaultMessage(meeting.getUuid());
         return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
     }

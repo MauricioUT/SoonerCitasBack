@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -67,6 +68,10 @@ public class TMeetingRepositoryWrapper {
 
     public long countByCurpOrMailOrPhone(String wildCard) {
         return tMeetingRepository.countByCurpOrMailOrPhone(wildCard, wildCard, wildCard, wildCard);
+    }
+
+    public boolean existsByCurpAndTMeetingScheduleCenter_IdMeetingStatus_IdIn(String curp, Collection<Integer> ids) {
+        return tMeetingRepository.existsByCurpAndTMeetingScheduleCenter_IdMeetingStatus_IdIn(curp,ids);
     }
 
     public Long save(TMeeting meet) {

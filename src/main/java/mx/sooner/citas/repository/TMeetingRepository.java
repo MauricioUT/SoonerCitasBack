@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,6 +54,10 @@ public interface TMeetingRepository extends JpaRepository<TMeeting, Long> {
 
     @Query("select count(t.id) from TMeeting t")
     long countAll();
+
+    @Query("select (count(t.id) > 0) from TMeeting t " +
+            "where t.curp = ?1 and t.tMeetingScheduleCenter.idMeetingStatus.id in ?2")
+    boolean existsByCurpAndTMeetingScheduleCenter_IdMeetingStatus_IdIn(String curp, Collection<Integer> ids);
 
 
 }
