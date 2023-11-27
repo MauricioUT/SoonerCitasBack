@@ -42,7 +42,7 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
         ps.close();
         ValidationErrorResponse error = new ValidationErrorResponse();
         for (ConstraintViolation violation : e.getConstraintViolations()) {
-            error.getErrors().add(new DefaultMessage(violation.getMessage()));
+            error.getErrors().add(new DefaultMessage(violation.getMessage(), 0));
         }
         error.setTimestamp(LocalDateTime.now());
         error.setStatus(HttpStatus.BAD_REQUEST.value());
@@ -91,7 +91,7 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
                 //.trace(baos.toString())
                 .trace("")
                 .message(message)
-                .errors(Collections.singletonList(new DefaultMessage(e.getMessage()))).build();
+                .errors(Collections.singletonList(new DefaultMessage(e.getMessage(), 0))).build();
         return buildResponseEntity(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
@@ -113,7 +113,7 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
                 .error(e.getMessage())
                 .trace("")
                 .message(message)
-                .errors(Collections.singletonList(new DefaultMessage(e.getMessage()))).build();
+                .errors(Collections.singletonList(new DefaultMessage(e.getMessage(), 0))).build();
         return buildResponseEntity(err, HttpStatus.NOT_FOUND);
     }
 
@@ -136,7 +136,7 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
                 .error("")
                 .trace("")
                 .message(message)
-                .errors(Collections.singletonList(new DefaultMessage(e.getCause().toString()))).build();
+                .errors(Collections.singletonList(new DefaultMessage(e.getCause().toString(), 0))).build();
         return buildResponseEntity(err, HttpStatus.LOCKED);
     }
 
@@ -159,9 +159,10 @@ class ErrorHandlingControllerAdvice extends ResponseEntityExceptionHandler {
                 .error(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase())
                 .trace("")
                 .message(message)
-                .errors(Collections.singletonList(new DefaultMessage("Ocurrió un error inesperado"))).build();
+                .errors(Collections.singletonList(new DefaultMessage("Ocurrió un error inesperado", 0))).build();
         return buildResponseEntity(err, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     private ResponseEntity<Object> buildResponseEntity(ValidationErrorResponse resp, HttpStatus status) {
         return new ResponseEntity<>(resp, status);
     }
