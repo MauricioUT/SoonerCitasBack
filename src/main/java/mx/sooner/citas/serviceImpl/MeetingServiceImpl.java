@@ -85,6 +85,7 @@ public class MeetingServiceImpl implements MeetingService {
         DefaultMessage defaultMessage = new DefaultMessage();
         boolean existeCurp = this.tMeetingRepositoryWrapper.existsByCurpAndTMeetingScheduleCenter_IdMeetingStatus_IdIn(meetingDto.getCurp(), List.of(MEETING_CREATED));
         if (existeCurp) {
+            defaultMessage.setStatus(0);
             defaultMessage.setDefaultMessage("ya existe una curp con estatus Registrado");
             return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
         }
@@ -139,6 +140,7 @@ public class MeetingServiceImpl implements MeetingService {
             throw new ExceptionGeneric("Error al agendar cita en calendario", new Throwable("addMeeting()"), this.getClass().getName());
         }
         defaultMessage.setDefaultMessage(meeting.getUuid());
+        defaultMessage.setStatus(1);
         return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
     }
 
