@@ -86,7 +86,7 @@ public class MeetingServiceImpl implements MeetingService {
         boolean existeCurp = this.tMeetingRepositoryWrapper.existsByCurpAndTMeetingScheduleCenter_IdMeetingStatus_IdIn(meetingDto.getCurp(), List.of(MEETING_CREATED));
         if (existeCurp) {
             defaultMessage.setStatus(0);
-            defaultMessage.setDefaultMessage("ya existe una curp con estatus Registrado");
+            defaultMessage.setDefaultMessage("Ya existe un registro con la misma CURP en estatus registrada");
             return new ResponseEntity<>(defaultMessage, HttpStatus.OK);
         }
         Optional<CEvaluationCenter> ec = this.cEvaluationCenterRepositoryWrapper.findById(meetingDto.getIdEvaluationCenter());
